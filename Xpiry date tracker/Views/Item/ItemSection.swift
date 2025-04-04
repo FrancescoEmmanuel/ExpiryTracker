@@ -3,92 +3,23 @@ import SwiftUI
 struct ItemSection: View {
     
     var title: String
-    var color: Color
+    var items: [ItemEntity]
+    
     @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var vm: CoreDataVM
     
     
     
-    var items: [ItemCard] = [
-        ItemCard(imageName: "grapes", itemName: "Grapes", quantity: 30, expiry: "12/08/24"),
-        ItemCard(imageName: "mango", itemName: "Mango", quantity: 20, expiry: "12/08/24")
-    ]
     
     var body: some View {
         
         
-        
         VStack(alignment: .leading, spacing: 0) {
-            HStack{
-                
-                if viewModel.isEditing {
-                    Button(action: {
-                        // Toggle selection for all items in the section
-                        let allSelected = items.allSatisfy { viewModel.selectedItems.contains($0.itemName) }
-                        if allSelected {
-                            items.forEach { viewModel.selectedItems.remove($0.itemName) }
-                        } else {
-                            items.forEach { viewModel.selectedItems.insert($0.itemName) }
-                        }
-                    }) {
-                        Image(systemName: items.allSatisfy { viewModel.selectedItems.contains($0.itemName) } ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(.gray)
-                            .frame(width: 24, height: 24)
-                           
-                    }
-                }
-                
-                Text(title)
-                    .font(.system(size: 14))
-                    .foregroundColor(color)
-                    .padding(.vertical,13)
-            } .padding(.leading,15)
             
             
-            
+            headerView
             Divider()
-            
-            VStack(spacing:0){
-                ForEach(Array(items.enumerated()), id: \.element.itemName) { index, item in
-                    VStack(spacing:0){
-                        HStack{
-                            if viewModel.isEditing{
-                                Button{
-                                    if viewModel.selectedItems.contains(item.itemName){
-                                        viewModel.selectedItems.remove(item.itemName)
-                                    } else{
-                                        viewModel.selectedItems.insert(item.itemName)
-                                    }
-                                    
-                                } label:{ Image(systemName: viewModel.selectedItems.contains(item.itemName) ? "checkmark.circle.fill" : "circle")
-                                        .foregroundColor(.gray)
-                                        .frame(width: 24, height: 24)
-                                    
-                                }
-                                
-                            }
-                            
-                            ItemCard(
-                                imageName: item.imageName,
-                                itemName: item.itemName,
-                                quantity: item.quantity,
-                                expiry: item.expiry
-                            )
-                            
-                        }
-                       
-                        
-                        // Add Divider only if it's NOT the last item
-                        
-                        if index < items.count - 1 {
-                            Divider()
-                        }
-                    }.padding(.leading,15)
-                    
-                }
-            }
-        
-            
-            
+            itemList
             
             
         }
@@ -100,9 +31,112 @@ struct ItemSection: View {
         
     }
     
+    private var headerView : some View {
+        
+        HStack{
+            if viewModel.isEditing {
+                Button(action: {
+                    // Toggle selection for all items in the section
+                    let allSelected = vm.items.allSatisfy { viewModel.selectedItems.contains($0.name ?? "undefined") }
+                    if allSelected {
+                        vm.items.forEach { viewModel.selectedItems.remove($0.name ?? "undefined") }
+                    } else {
+                        vm.items.forEach { viewModel.selectedItems.insert($0.name ?? "undefined") }
+                    }
+                }) {
+                    Image(systemName: vm.items.allSatisfy { viewModel.selectedItems.contains($0.name ?? "undefined") } ? "checkmark.circle.fill" : "circle")
+                        .foregroundColor(.gray)
+                        .frame(width: 24, height: 24)
+                    
+                }
+            }
+            
+            Text(title)
+                .font(.system(size: 14))
+                .foregroundColor(determineColor(title: title))
+                .padding(.vertical,13)
+            
+        }.padding(.leading,15)
+        
+        
+        
+        
+    }
+    
+    private var itemList: some View {
+        ForEach(items, id: \.self) { item in
+            itemRow(for: item)
+            
+        }
+    }
+    
+    private func itemRow(for item: ItemEntity) -> some View {
+        VStack(spacing:0){
+            HStack{
+                if viewModel.isEditing{
+                    Button{
+                        if viewModel.selectedItems.contains(item.name ?? "undefined"){
+                            viewModel.selectedItems.remove(item.name ?? "undefined")
+                        } else{
+                            viewModel.selectedItems.insert(item.name ?? "undefined")
+                        }
+                        
+                    } label:{ Image(systemName: viewModel.selectedItems.contains(item.name ?? "undefined") ? "checkmark.circle.fill" : "circle")
+                            .foregroundColor(.gray)
+                            .frame(width: 24, height: 24)
+                        
+                    }
+                    
+                }
+                
+                ItemCard(
+                    
+                    item: item,
+                    vm:vm
+                )
+                
+            }
+            
+            // Add Divider only if it's NOT the last item
+            
+            if !isLastItem(item){
+                Divider()
+            }
+            
+        }.padding(.leading,15)
+    }
+    
+    private func formattedDate(_ date: Date?) -> String {
+        guard let date = date else { return "Unknown" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy"
+        return formatter.string(from: date)
+    }
+    
+    private func isLastItem(_ item: ItemEntity) -> Bool {
+        guard let index = vm.items.firstIndex(of: item) else { return false }
+        return index == vm.items.count - 1
+    }
+    
+    private func determineColor(title : String) -> Color {
+    
+        switch title {
+            case "Expired": return Color.red
+            case "Expiring tomorrow": return Color.orange
+    
+        default:
+            return Color.green
+        }
+    }
+    
+    
+    
+    
+    
+    
 }
 
 
-#Preview {
-    ItemSection(title: "PAST DUE", color: Color.red).environmentObject(ViewModel())
-}
+//#Preview {
+//    ItemSection(title: "PAST DUE", color: Color.red).environmentObject(ViewModel()).environmentObject(vm())
+//}

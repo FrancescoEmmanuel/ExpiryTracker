@@ -95,10 +95,12 @@ class CoreDataVM: ObservableObject {
     }
     
     
-    func addItem(name: String, quantity: Int64, category: CategoryEntity?=nil) {
+    func addItem(name: String, quantity: Int64, category: CategoryEntity?=nil, exp: Date) {
         let newItem = ItemEntity(context: manager.context)
+        newItem.id = UUID()
         newItem.name = name
         newItem.qty = quantity
+        newItem.exp = exp
         // categorygrouping is not an attribute of item, kita ga perlu define sbg attribute. meski item ada categorynya, kita ga harus define as attribute, krn category entity ud didefine relationshipnya sama item.
         newItem.categorygrouping = category ?? getDefaultCategory() // klo kosong catnya ywd getdefault (uncategorised)
         saveData()
