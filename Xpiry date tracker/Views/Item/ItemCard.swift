@@ -10,11 +10,23 @@ import SwiftUI
 
 struct ItemCard: View {
     
-    var imageName: String
-    var itemName: String
-    var quantity: Int
-    var expiry: String
+    let item: ItemEntity
     
+    let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yy" // Change format as needed
+        return formatter
+    }()
+
+ 
+    
+    @ObservedObject var vm: CoreDataVM
+    
+//    var imageName: String
+//    var itemName: String
+//    var quantity: Int
+//    var expiry: String
+//    
     
     var body: some View {
         
@@ -23,19 +35,21 @@ struct ItemCard: View {
         VStack{
             
             HStack{
-                Image(imageName).resizable()
+                Image("mango").resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 44, height: 44)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 
                 VStack(alignment: .leading){
-                    Text(itemName).font(.system(size:16, weight:.medium))
-                    Text(String("Quantity: \(quantity)")).font( .system(size:15 ,weight: .regular)).foregroundColor(.gray)
+                    Text(item.name ?? "Undefined").font(.system(size:16, weight:.medium))
+                    Text(String("Quantity: \(item.qty)")).font( .system(size:15 ,weight: .regular)).foregroundColor(.gray)
                 }
                 Spacer()
                 VStack(alignment: .trailing){
                     Text("ED").font(.system(size:14 ,weight:.light))
-                    Text(expiry).font(.system(size:14 ,weight:.regular))
+                    
+                    Text(item.exp.map { dateFormatter.string(from: $0) } ?? "No Date").font(.system(size:14 ,weight:.regular))
+
                 }
                 
                 .foregroundColor(.gray)
@@ -49,7 +63,7 @@ struct ItemCard: View {
             
         }.swipeActions(edge: .trailing, allowsFullSwipe: true){
             Button{
-                
+                vm.deleteItem(item)
                 print("delete")
             } label:{
                 Image(systemName:"trash").tint(.myRed)
@@ -75,5 +89,16 @@ struct ItemCard: View {
 
 
 #Preview {
-    ItemCard(imageName:"grapes", itemName:"Grapes", quantity:20, expiry:"25/03/25")
+  
+    let context = PersistenceController.shared.container.viewContext
+    
+
+    let sampleItem = ItemEntity(context: context)
+    sampleItem.name = "Grapes"
+    sampleItem.qty = 20
+    sampleItem.exp = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 25)) // 
+    
+    return ItemCard(item: sampleItem, vm: CoreDataVM())
+    
+    
 }

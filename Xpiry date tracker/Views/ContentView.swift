@@ -1,26 +1,42 @@
 import SwiftUI
 
-struct ContentView:
-                        
-    View {
+struct ContentView: View {
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    @StateObject var vm = CoreDataVM()
+
+    
     
     @State private var selectedCategory = "Uncategorized"
     @StateObject private var viewModel = ViewModel()
     @State private var showCategoryModal = false
     
     
-    @State var sections: [ItemSection] = [
-        ItemSection(title: "PAST DUE", color: Color.red),
-        ItemSection(title: "DUE IN 3 DAYS", color: Color.orange),
-        ItemSection(title: "DUE IN 12 DAYS", color: Color.gray),
-        ItemSection(title: "DUE LATER", color: Color.gray)
+//    @State var sections: [ItemSection] = [
+//        ItemSection(title: "PAST DUE", color: Color.red),
+//        ItemSection(title: "DUE IN 3 DAYS", color: Color.orange),
+//        ItemSection(title: "DUE IN 12 DAYS", color: Color.gray),
+//        ItemSection(title: "DUE LATER", color: Color.gray)
+//    ]
+    
+    let sectionPriority: [String: Int] = [
+        "Expired": 0,
+        "Expiring Tomorrow": 1,
+        "Expiring in 2 Days": 2,
+        "Expiring in 3 Days": 3,
+        "Expiring in 4 Days": 4,
+        "Expiring in 5 Days": 5,
+        "Expiring in 6 Days": 6,
+        "Expiring in 7 Days": 7,
+        "Expiring Later": 8
     ]
+    
+
     
     var body: some View {
         
-        
         NavigationStack {
-            
             ZStack {
                 Color.background.ignoresSafeArea()
                 
@@ -70,8 +86,21 @@ struct ContentView:
                         }
                         
                         VStack(spacing:0){
-                            ForEach(sections, id: \.title) { section in
-                                section.environmentObject(viewModel)
+                            let grouped = groupItemsByExpiry(vm.items)
+
+                            let orderedSections = grouped.keys.sorted {
+                                (sectionPriority[$0] ?? Int.max) < (sectionPriority[$1] ?? Int.max)
+                            }
+
+                            ForEach(orderedSections, id: \.self) { section in
+                                if let itemsInSection = grouped[section], !itemsInSection.isEmpty {
+                                    ItemSection(
+                                        title: section,
+                                        items: itemsInSection
+                                    )
+                                    .environmentObject(vm)
+                                    .environmentObject(viewModel)
+                                }
                             }
                             .padding(.bottom,10)
                             
@@ -156,6 +185,17 @@ struct ContentView:
                     
                 }
                 
+                Button{
+                    vm.addItem(name: "grape", quantity: 3, exp: Date())
+                    
+                } label:{
+                    Text("Add item")
+                }
+                
+
+                
+                
+                
             }.sheet(isPresented: $showCategoryModal) {
                 CategoryPage()
             }
@@ -163,8 +203,9 @@ struct ContentView:
             
         }
     }
+    
 }
 
 #Preview {
-    ContentView()
+    ContentView().environment(\.managedObjectContext, PersistenceController().container.viewContext)
 }
