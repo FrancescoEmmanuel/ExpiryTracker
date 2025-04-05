@@ -11,11 +11,13 @@ import PhotosUI
 struct EditCategory: View {
     @Environment(\.dismiss) private var dismiss
     @State private var categoryName: String = ""
+    @State private var selectedImage: UIImage? = nil
     @State private var isClicked = false // Track button state
     @ObservedObject var vm: CoreDataVM // to access core data view model
     // declare category property
     @ObservedObject var category: CategoryEntity
     
+    let fileManager = LocalFileManager.instance
     let screenWidth = UIScreen.main.bounds.width
     
     // initialize biar skali jalanin lgsg load data yg ada
@@ -32,7 +34,7 @@ struct EditCategory: View {
                     .background(.ultraThinMaterial) // Apple's blur effect
                     .ignoresSafeArea()
                 VStack {
-                    ImagePicker(displayText: "Change Photo")
+                    ImagePicker(selectedImage: $selectedImage, displayText: "Change Photo", category: category, vm: vm)
                     HStack {
                         Text("Name")
                             .frame(height: 45)
@@ -99,11 +101,10 @@ struct EditCategory: View {
     }
 }
 
-#Preview {
-    let context = CoreDataManager.instance.context
-    let category = CategoryEntity(context: context)
-    category.name = "Sample Category"
-    let vm = CoreDataVM()
-    return EditCategory(category: category, vm: vm)
-}
-   
+//#Preview {
+//    let context = CoreDataManager.instance.context
+//    let category = CategoryEntity(context: context)
+//    category.name = "Sample Category"
+//    let vm = CoreDataVM()
+//    return EditCategory(category: category, vm: vm)
+//}

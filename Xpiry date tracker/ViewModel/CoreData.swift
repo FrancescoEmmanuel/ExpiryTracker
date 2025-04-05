@@ -80,6 +80,11 @@ class CoreDataVM: ObservableObject {
         }
     }
     
+    func getCategoryImage(category: CategoryEntity) -> UIImage? {
+        guard let imageName = category.imgName else {return nil}
+        return LocalFileManager.instance.getImage(name: imageName)
+    }
+    
     private func getDefaultCategory() -> CategoryEntity {
         let request = NSFetchRequest<CategoryEntity>(entityName: "CategoryEntity")
         request.predicate = NSPredicate(format: "name == %@", "Uncategorised")
@@ -96,22 +101,27 @@ class CoreDataVM: ObservableObject {
     
     
     func addItem(name: String, quantity: Int64, category: CategoryEntity?=nil, exp: Date) {
-        let newItem = ItemEntity(context: manager.context)
-        newItem.id = UUID()
-        newItem.name = name
-        newItem.qty = quantity
-        newItem.exp = exp
-        // categorygrouping is not an attribute of item, kita ga perlu define sbg attribute. meski item ada categorynya, kita ga harus define as attribute, krn category entity ud didefine relationshipnya sama item.
-        newItem.categorygrouping = category ?? getDefaultCategory() // klo kosong catnya ywd getdefault (uncategorised)
-        saveData()
-    }
+            let newItem = ItemEntity(context: manager.context)
+            newItem.id = UUID()
+            newItem.name = name
+            newItem.qty = quantity
+            newItem.exp = exp
+            // categorygrouping is not an attribute of item, kita ga perlu define sbg attribute. meski item ada categorynya, kita ga harus define as attribute, krn category entity ud didefine relationshipnya sama item.
+            newItem.categorygrouping = category ?? getDefaultCategory() // klo kosong catnya ywd getdefault (uncategorised)
+            saveData()
+        }
     
-    func addCategory(name: String){
+    func addCategory(name: String, image: UIImage?){
         let newCategory = CategoryEntity(context: manager.context)
         newCategory.name = name
         // adding items
 //        newCategory.items = [items]
 //        newCategory.addToItems(item[0]) -> second way
+        if let image = image {
+            let imageName = UUID().uuidString
+            LocalFileManager.instance.saveImg(image: image, name: imageName)
+            newCategory.imgName = imageName
+        }
         saveData()
     }
     
@@ -138,6 +148,9 @@ class CoreDataVM: ObservableObject {
     // klo mau pas panggil function ga nulis deleteItem(item:..) bisa pke code func deleteItem(_ item: ItemEntity). klo ada _ di depan -> pas manggil function tinggal deleteItem(barangnyaapa). pke klo ud jelas yg lu mau pass data apa
     
     func deleteCategory(_ category: CategoryEntity){
+        if let imageName = category.imgName{
+            LocalFileManager.instance.deleteImage(name: imageName)
+        }
         manager.context.delete(category)
         saveData()
     }
@@ -152,16 +165,4 @@ class CoreDataVM: ObservableObject {
     
 }
 
-struct CoreDataView: View {
-    @StateObject var vm = CoreDataVM()
-    var body: some View{
-        VStack{
-            Text("hello world")
-        }
-    }
-}
 
-
-#Preview {
-    CoreDataView()
-}

@@ -104,7 +104,7 @@ struct ContentView: View {
                                     return item.categorygrouping?.name == selectedCategory
                                 }
                             }
-
+                            
                             
                             let grouped = groupItemsByExpiry(filteredItems)
                             
@@ -130,7 +130,6 @@ struct ContentView: View {
                     }
                 }
                 .toolbarBackground(.ultraThinMaterial.opacity(0.5), for: .navigationBar)
-                
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
@@ -154,8 +153,8 @@ struct ContentView: View {
                         }
                         .disabled(viewModel.isEditing)
                         
-
-                       
+                        
+                        
                         Button {} label: {
                             if !viewModel.isEditing{
                                 Image(systemName: "plus").foregroundColor(.black)
@@ -237,7 +236,7 @@ struct ContentView: View {
                     Spacer()
                     Button{
                         
-//                        let a = vm.categories[1]
+                        //                        let a = vm.categories[1]
                         vm.addItem(name: "grape", quantity: 3, exp: Date())
                         
                     } label:{
@@ -258,7 +257,7 @@ struct ContentView: View {
             
         }
     }
-    
+
 }
 
 #Preview {

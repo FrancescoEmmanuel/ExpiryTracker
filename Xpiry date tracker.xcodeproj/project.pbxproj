@@ -16,11 +16,6 @@
 			path = "Xpiry date tracker";
 			sourceTree = "<group>";
 		};
-		30DB11EA2D9FD17400FF14E8 /* Utils */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Utils;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +34,6 @@
 			children = (
 				304A46C62D93B81E0016AF16 /* Xpiry date tracker */,
 				304A46C52D93B81E0016AF16 /* Products */,
-				30DB11EA2D9FD17400FF14E8 /* Utils */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,7 +62,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				304A46C62D93B81E0016AF16 /* Xpiry date tracker */,
-				30DB11EA2D9FD17400FF14E8 /* Utils */,
 			);
 			name = "Xpiry date tracker";
 			packageProductDependencies = (

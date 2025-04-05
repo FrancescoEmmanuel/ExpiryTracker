@@ -10,10 +10,13 @@ import PhotosUI
 struct AddCategory: View {
     @Environment(\.dismiss) private var dismiss
     @State private var categoryName: String = ""
+    @State private var selectedImage: UIImage? = nil
     @State private var isClicked = false // Track button state
     @ObservedObject var vm: CoreDataVM // to access core data view model
+    @State var category: CategoryEntity
     
     let screenWidth = UIScreen.main.bounds.width
+    let fileManager = LocalFileManager.instance
     
     var body: some View {
         NavigationStack{
@@ -22,7 +25,7 @@ struct AddCategory: View {
                     .background(.ultraThinMaterial) // Apple's blur effect
                     .ignoresSafeArea()
                 VStack {
-                    ImagePicker(displayText: "Add Photo")
+                    ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo", category: category, vm: vm)
                     HStack {
                         Text("Name")
                             .frame(height: 45)
@@ -43,7 +46,7 @@ struct AddCategory: View {
                     Button(action: {
                         isClicked.toggle() // Change state on click
                         guard !categoryName.isEmpty else {return} // if null then ga add
-                        vm.addCategory(name: categoryName)
+                        vm.addCategory(name: categoryName, image: selectedImage)
                         categoryName = "" // kosongin lagi for next input
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // Small delay to ensure dismissal
                                 dismiss()
@@ -89,7 +92,11 @@ struct AddCategory: View {
     }
 }
 
-#Preview {
-    AddCategory(vm: CoreDataVM())
-}
-   
+//#Preview {
+//    let context = CoreDataManager.instance.context
+//    let category = CategoryEntity(context: context)
+//    category.name = "Sample Category"
+//    let vm = CoreDataVM()
+//    return AddCategory(vm: vm, category: category)
+//}
+//

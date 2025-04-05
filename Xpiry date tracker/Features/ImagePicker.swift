@@ -9,9 +9,13 @@ import SwiftUI
 import PhotosUI
 
 struct ImagePicker: View {
-    @State private var selectedImage: UIImage? = nil
+
+    @Binding var selectedImage: UIImage?
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    let fileManager = LocalFileManager.instance
     let displayText: String
+    let category: CategoryEntity
+    @ObservedObject var vm: CoreDataVM
     
     var body: some View {
         VStack {
@@ -47,20 +51,46 @@ struct ImagePicker: View {
 
         }
         .padding()
+        .onAppear {
+            loadSavedImage()
+        }
+    }
+    
+    private func loadSavedImage() {
+            if let imgName = category.imgName, let image = fileManager.getImage(name: imgName) {
+                selectedImage = image
+            }
     }
     
     // Function to load the selected image
     private func loadImage() {
-            guard let selectedPhoto else { return } // Ensure an item was selected
-            Task {
-                if let data = try? await selectedPhoto.loadTransferable(type: Data.self),
-                   let image = UIImage(data: data) {
-                    selectedImage = image
-                }
+        guard let selectedPhoto else { return }
+        Task {
+            if let data = try? await selectedPhoto.loadTransferable(type: Data.self),
+               let image = UIImage(data: data) {
+                selectedImage = image
+                let imgName = UUID().uuidString // Generate a unique name
+                fileManager.saveImg(image: image, name: imgName)
+                category.imgName = imgName // Store the new image name
+                vm.saveData() // Persist changes
             }
         }
+    }
 }
 
-#Preview {
-    ImagePicker(displayText: "Add Photo")
-}
+//#Preview {
+//    @Previewable @State var selectedImage: UIImage? = nil
+//
+//    // Create a mock CoreData context
+//    let previewContext = CoreDataManager.instance.context
+//
+//    // Create a sample CategoryEntity
+//    let sampleCategory: CategoryEntity = {
+//        let category = CategoryEntity(context: previewContext)
+//        category.name = "Sample Category"
+//        category.imgName = "" // No saved image initially
+//        return category
+//    }()
+//
+//    ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo" , category: sampleCategory, vm: CoreDataVM())
+//}

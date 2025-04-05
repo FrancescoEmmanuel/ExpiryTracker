@@ -3,9 +3,12 @@
 
 import SwiftUI
 
+
 struct CategoryPage: View {
     @Environment(\.dismiss) private var dismiss // To close the modal
     @State private var showAddCategory = false
+    @State private var categoryName: String = ""
+    @State private var selectedImage: UIImage? = nil
     @ObservedObject var vm = CoreDataVM()
     
 //    private let catData = CategoryModel.generateCategoryModel()
@@ -17,7 +20,9 @@ struct CategoryPage: View {
     var body: some View {
         NavigationStack { // Wrap in NavigationStack for in-modal navigation
             ZStack{
-
+                Color.white.opacity(0.2) // Semi-transparent overlay
+                    .ignoresSafeArea()
+                    .blur(radius: 10)
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 8) {
                         ForEach(vm.categories, id: \.self) { category in
@@ -27,7 +32,6 @@ struct CategoryPage: View {
                     }
                     .padding()
                 }
-                .background(.ultraThinMaterial).opacity(0.5)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
@@ -53,7 +57,7 @@ struct CategoryPage: View {
                                 .foregroundStyle(Color(hex: "#0F8822"))
                         }
                         .sheet(isPresented: $showAddCategory) {
-                            AddCategory(vm: vm)
+                            AddCategory(vm: vm, category: CategoryEntity(context: vm.manager.context))
                         }
                     }
                     
@@ -65,3 +69,6 @@ struct CategoryPage: View {
     }
 }
  
+
+
+

@@ -15,6 +15,9 @@ struct CategoryCard: View {
     @State private var showEditCategory = false
     @ObservedObject var vm: CoreDataVM
     
+    @State private var selectedImage: UIImage? = nil
+    let fileManager = LocalFileManager.instance
+    
     var body: some View {
             ZStack {
                 RoundedRectangle(cornerRadius: 16)
@@ -23,12 +26,24 @@ struct CategoryCard: View {
                     .frame(width: 175.5, height: 90)
                 VStack{
                     HStack (alignment: .top){
-                        Image("nuGreenTea") // sementara placeholder image
-                            .resizable()
-                            .scaleEffect(2)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 45, height: 40)
-                            .clipShape(Circle())
+                        if let name = category.imgName,
+                           let image = fileManager.getImage(name: name) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 45, height: 40)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: "photo.fill") // fallback image
+                                .resizable()
+                                .scaleEffect(0.6)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 45, height: 40)
+                                .foregroundColor(.gray)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 0.5))
+                        }
+
                         Spacer()
                         
                         Menu {
@@ -72,13 +87,13 @@ struct CategoryCard: View {
         }
 }
 
-//
+
 //#Preview {
 //    let previewContext = CoreDataManager.instance.context
 //        let sampleCategory: CategoryEntity = {
 //            let category = CategoryEntity(context: previewContext)
-//            category.name = "Drinks"
-//            
+//            category.name = nil
+//
 //            let item1 = ItemEntity(context: previewContext)
 //            item1.name = "Milk"
 //            item1.categorygrouping = category
@@ -90,5 +105,5 @@ struct CategoryCard: View {
 //            category.items = NSSet(array: [item1, item2])
 //            return category
 //        }()
-//        
+//
 //        return CategoryCard(category: sampleCategory, vm: CoreDataVM())}
