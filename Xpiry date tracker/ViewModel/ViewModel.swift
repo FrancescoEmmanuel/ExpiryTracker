@@ -8,8 +8,9 @@
 
 import SwiftUI
 
+
 class ViewModel: ObservableObject {
     @Published var isEditing = false
-    @Published var selectedItems: Set<String> = []
+    @Published var selectedItems: Set<UUID> = []
     @Published var sections = []
 }
