@@ -37,14 +37,14 @@ struct ItemSection: View {
             if viewModel.isEditing {
                 Button(action: {
                     // Toggle selection for all items in the section
-                    let allSelected = vm.items.allSatisfy { viewModel.selectedItems.contains($0.name ?? "undefined") }
+                    let allSelected = vm.items.allSatisfy { viewModel.selectedItems.contains($0.id ?? UUID()) }
                     if allSelected {
-                        vm.items.forEach { viewModel.selectedItems.remove($0.name ?? "undefined") }
+                        vm.items.forEach { viewModel.selectedItems.remove($0.id ?? UUID()) }
                     } else {
-                        vm.items.forEach { viewModel.selectedItems.insert($0.name ?? "undefined") }
+                        vm.items.forEach { viewModel.selectedItems.insert($0.id ?? UUID()) }
                     }
                 }) {
-                    Image(systemName: vm.items.allSatisfy { viewModel.selectedItems.contains($0.name ?? "undefined") } ? "checkmark.circle.fill" : "circle")
+                    Image(systemName: vm.items.allSatisfy { viewModel.selectedItems.contains($0.id ?? UUID()) } ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(.gray)
                         .frame(width: 24, height: 24)
                     
@@ -75,13 +75,13 @@ struct ItemSection: View {
             HStack{
                 if viewModel.isEditing{
                     Button{
-                        if viewModel.selectedItems.contains(item.name ?? "undefined"){
-                            viewModel.selectedItems.remove(item.name ?? "undefined")
+                        if viewModel.selectedItems.contains(item.id ?? UUID()){
+                            viewModel.selectedItems.remove(item.id ?? UUID())
                         } else{
-                            viewModel.selectedItems.insert(item.name ?? "undefined")
+                            viewModel.selectedItems.insert(item.id ?? UUID())
                         }
                         
-                    } label:{ Image(systemName: viewModel.selectedItems.contains(item.name ?? "undefined") ? "checkmark.circle.fill" : "circle")
+                    } label:{ Image(systemName: viewModel.selectedItems.contains(item.id ?? UUID()) ? "checkmark.circle.fill" : "circle")
                             .foregroundColor(.gray)
                             .frame(width: 24, height: 24)
                         

@@ -17,7 +17,8 @@ struct ItemCard: View {
         formatter.dateFormat = "dd/MM/yy" // Change format as needed
         return formatter
     }()
-
+    
+    @State private var showDeleteAlert: Bool = false
  
     
     @ObservedObject var vm: CoreDataVM
@@ -63,8 +64,9 @@ struct ItemCard: View {
             
         }.swipeActions(edge: .trailing, allowsFullSwipe: true){
             Button{
-                vm.deleteItem(item)
-                print("delete")
+                showDeleteAlert.toggle()
+              
+                
             } label:{
                 Image(systemName:"trash").tint(.myRed)
             }
@@ -78,6 +80,11 @@ struct ItemCard: View {
             
             
         }.enableSwipeAction()
+            .alert(isPresented: $showDeleteAlert) {
+                Alert(title: Text("Delete Item?"), message: Text("Are you sure you want to delete this item? It will be removed permanently from your list."), primaryButton: .destructive(Text("Delete")){
+                    vm.deleteItem(item)
+                }, secondaryButton: .cancel())
+            }
     }
         
         
