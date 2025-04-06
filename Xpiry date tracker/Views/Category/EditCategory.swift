@@ -34,7 +34,7 @@ struct EditCategory: View {
                     .background(.ultraThinMaterial) // Apple's blur effect
                     .ignoresSafeArea()
                 VStack {
-                    ImagePicker(selectedImage: $selectedImage, displayText: "Change Photo", category: category, vm: vm)
+                    ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo")
                     HStack {
                         Text("Name")
                             .frame(height: 45)
@@ -53,11 +53,15 @@ struct EditCategory: View {
                     .padding(.vertical, 40)
                     Spacer()
                     Button(action: {
-                        isClicked.toggle() // Change state on click
-                        guard !categoryName.isEmpty else {return} // if null then ga add
-                        vm.updateCategory(category: category, newName: categoryName)
+                        guard !categoryName.isEmpty else { return }
+                        isClicked = true // Disables button immediately
+                        if let image = selectedImage {
+                            let imageName = UUID().uuidString
+                            fileManager.saveImg(image: image, name: imageName)
+                            vm.updateCategoryImage(category: category, imageName: imageName)
+                        }
                         categoryName = "" // kosongin lagi for next input
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // Small delay to ensure dismissal
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // Small delay to ensure dismissal
                                 dismiss()
                         }
                         
@@ -66,6 +70,7 @@ struct EditCategory: View {
                             .foregroundStyle(Color(hex: "#0F8822"))
                             
                     }
+                    .disabled(isClicked)
                     .frame(width: screenWidth*0.9, height: 60)
                     .background(isClicked ? Color(hex: "#F0F0F0") : Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -98,6 +103,12 @@ struct EditCategory: View {
             }
             
         }
+        .onAppear {
+            if selectedImage == nil, let imageName = category.imgName {
+                selectedImage = fileManager.getImage(name: imageName)
+            }
+        }
+
     }
 }
 

@@ -147,6 +147,11 @@ class CoreDataVM: ObservableObject {
     
     // klo mau pas panggil function ga nulis deleteItem(item:..) bisa pke code func deleteItem(_ item: ItemEntity). klo ada _ di depan -> pas manggil function tinggal deleteItem(barangnyaapa). pke klo ud jelas yg lu mau pass data apa
     
+    func updateCategoryImage(category: CategoryEntity, imageName: String) {
+        category.imgName = imageName
+        saveData()
+    }
+
     func deleteCategory(_ category: CategoryEntity){
         if let imageName = category.imgName{
             LocalFileManager.instance.deleteImage(name: imageName)

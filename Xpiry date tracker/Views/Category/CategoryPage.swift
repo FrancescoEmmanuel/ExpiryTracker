@@ -57,7 +57,7 @@ struct CategoryPage: View {
                                 .foregroundStyle(Color(hex: "#0F8822"))
                         }
                         .sheet(isPresented: $showAddCategory) {
-                            AddCategory(vm: vm, category: CategoryEntity(context: vm.manager.context))
+                            AddCategory(vm: vm)
                         }
                     }
                     

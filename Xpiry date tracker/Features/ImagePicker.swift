@@ -9,17 +9,12 @@ import SwiftUI
 import PhotosUI
 
 struct ImagePicker: View {
-
     @Binding var selectedImage: UIImage?
     @State private var selectedPhoto: PhotosPickerItem? = nil
-    let fileManager = LocalFileManager.instance
     let displayText: String
-    let category: CategoryEntity
-    @ObservedObject var vm: CoreDataVM
     
     var body: some View {
         VStack {
-            // Display selected image
             if let selectedImage {
                 Image(uiImage: selectedImage)
                     .resizable()
@@ -28,7 +23,6 @@ struct ImagePicker: View {
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.gray, lineWidth: 2))
             } else {
-                // Default placeholder image
                 Image(systemName: "photo.fill")
                     .resizable()
                     .scaleEffect(0.6)
@@ -39,7 +33,6 @@ struct ImagePicker: View {
                     .overlay(Circle().stroke(Color.gray, lineWidth: 1))
             }
             
-            // PhotoPicker button
             PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
                 Text(displayText)
                     .foregroundStyle(Color(hex: "#0F8822"))
@@ -48,31 +41,16 @@ struct ImagePicker: View {
             .onChange(of: selectedPhoto) {
                 loadImage()
             }
-
         }
         .padding()
-        .onAppear {
-            loadSavedImage()
-        }
     }
     
-    private func loadSavedImage() {
-            if let imgName = category.imgName, let image = fileManager.getImage(name: imgName) {
-                selectedImage = image
-            }
-    }
-    
-    // Function to load the selected image
     private func loadImage() {
         guard let selectedPhoto else { return }
         Task {
             if let data = try? await selectedPhoto.loadTransferable(type: Data.self),
                let image = UIImage(data: data) {
                 selectedImage = image
-                let imgName = UUID().uuidString // Generate a unique name
-                fileManager.saveImg(image: image, name: imgName)
-                category.imgName = imgName // Store the new image name
-                vm.saveData() // Persist changes
             }
         }
     }

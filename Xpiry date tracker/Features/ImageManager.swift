@@ -57,9 +57,9 @@ class LocalFileManager {
         
         do {
             try data.write(to: path)
-            print("successfully saved")
+            print("successfully saved image")
         } catch let error {
-            print("error saving. \(error)")
+            print("error saving image. \(error)")
         }
         
     }
@@ -95,7 +95,7 @@ class LocalFileManager {
         guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
             .appendingPathComponent(folderName)
             .appendingPathComponent("\(name).jpg") else {
-            print("error getting data")
+            print("error getting image path")
             return nil
         }
         return path

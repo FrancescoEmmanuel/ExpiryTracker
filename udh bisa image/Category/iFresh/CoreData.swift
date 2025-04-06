@@ -136,6 +136,7 @@ class CoreDataVM: ObservableObject {
     func updateCategory(category: CategoryEntity, newName: String){
         category.name = newName
         saveData()
+        print("category updated.")
     }
     
     func deleteItem(_ item: ItemEntity){
@@ -151,6 +152,7 @@ class CoreDataVM: ObservableObject {
         }
         manager.context.delete(category)
         saveData()
+        print("category deleted")
     }
     
     func saveData(){

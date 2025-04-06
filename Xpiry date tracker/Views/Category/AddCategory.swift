@@ -11,9 +11,8 @@ struct AddCategory: View {
     @Environment(\.dismiss) private var dismiss
     @State private var categoryName: String = ""
     @State private var selectedImage: UIImage? = nil
-    @State private var isClicked = false // Track button state
-    @ObservedObject var vm: CoreDataVM // to access core data view model
-    @State var category: CategoryEntity
+    @State private var isClicked = false
+    @ObservedObject var vm: CoreDataVM
     
     let screenWidth = UIScreen.main.bounds.width
     let fileManager = LocalFileManager.instance
@@ -25,7 +24,7 @@ struct AddCategory: View {
                     .background(.ultraThinMaterial) // Apple's blur effect
                     .ignoresSafeArea()
                 VStack {
-                    ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo", category: category, vm: vm)
+                    ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo")
                     HStack {
                         Text("Name")
                             .frame(height: 45)
