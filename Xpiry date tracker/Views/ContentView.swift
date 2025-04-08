@@ -23,15 +23,15 @@ struct ContentView: View {
     
     
     let sectionPriority: [String: Int] = [
-        "Expired": 0,
-        "Expiring Tomorrow": 1,
-        "Expiring in 2 Days": 2,
-        "Expiring in 3 Days": 3,
-        "Expiring in 4 Days": 4,
-        "Expiring in 5 Days": 5,
-        "Expiring in 6 Days": 6,
-        "Expiring in 7 Days": 7,
-        "Expiring Later": 8
+        "PAST DUE": 0,
+        "DUE TOMORROW": 1,
+        "DUE IN 2 DAYS": 2,
+        "DUE IN 3 DAYS": 3,
+        "DUE IN 4 DAYS": 4,
+        "DUE IN 5 DAYS": 5,
+        "DUE IN 6 DAYS": 6,
+        "DUE IN 7 DAYS": 7,
+        "FAR FROM DUE": 8
     ]
     
     
