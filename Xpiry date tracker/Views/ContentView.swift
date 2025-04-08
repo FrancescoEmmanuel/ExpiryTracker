@@ -8,10 +8,16 @@ struct ContentView: View {
     
     
     
-    @State private var selectedCategory = "All"
+    @State private var selectedCategory: CategoryEntity?
+    @State private var selectedCategoryName: String = "All"
+    
     @StateObject private var viewModel = ViewModel()
     @State private var showCategoryModal = false
     @State private var showDeleteAlert: Bool = false
+    @State private var showAddModal = false
+    
+    
+    
     
     
     
@@ -36,15 +42,14 @@ struct ContentView: View {
             ZStack {
                 Color.background.ignoresSafeArea()
                 
-                ScrollView {
+                ScrollView{
                     VStack(alignment:.leading, spacing: 0) {
                         ScrollView(.horizontal, showsIndicators: false){
                             HStack {
-                                CategoryButton(label: "All", selectedCategory: $selectedCategory)
-                                CategoryButton(label: "Uncategorized", selectedCategory: $selectedCategory)
+                                CategoryButton(label: "All", selectedCategory: $selectedCategoryName)
                                 
                                 ForEach(vm.categories, id: \.self){ category in
-                                    CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategory)
+                                    CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
                                     
                                 }
                                 
@@ -97,11 +102,11 @@ struct ContentView: View {
                         VStack(spacing:0){
                             
                             let filteredItems = vm.items.filter { item in
-                                switch selectedCategory {
+                                switch selectedCategoryName {
                                 case "All":
                                     return true
                                 default:
-                                    return item.categorygrouping?.name == selectedCategory
+                                    return item.categorygrouping?.name == selectedCategoryName
                                 }
                             }
                             
@@ -155,12 +160,15 @@ struct ContentView: View {
                         
                         
                         
-                        Button {} label: {
+                        Button {
+                            showAddModal.toggle()
+                        } label: {
                             if !viewModel.isEditing{
                                 Image(systemName: "plus").foregroundColor(.black)
                             }
                             
                         }
+                        
                         Button {
                             if viewModel.isEditing{
                                 vm.items.forEach { viewModel.selectedItems.insert($0.id ?? UUID()) }
@@ -230,28 +238,12 @@ struct ContentView: View {
                     }
                     
                 }
-                
-                
-                VStack{
-                    Spacer()
-                    Button{
-                        
-                        //                        let a = vm.categories[1]
-                        vm.addItem(name: "grape", quantity: 3, exp: Date())
-                        
-                    } label:{
-                        Text("Add item")
-                    }
-                    
-                }
-                
-                
-                
-                
-                
-                
+
             }.sheet(isPresented: $showCategoryModal) {
-                CategoryPage()
+                CategoryPage(showAddModal: $showAddModal, selectedCategory: $selectedCategory).environmentObject(vm)
+            }
+            .sheet(isPresented: $showAddModal) {
+                AddItemView(showAddModal: $showAddModal, selectedCategory: $selectedCategory).environmentObject(vm)
             }
             
             

@@ -37,14 +37,14 @@ struct ItemSection: View {
             if viewModel.isEditing {
                 Button(action: {
                     // Toggle selection for all items in the section
-                    let allSelected = vm.items.allSatisfy { viewModel.selectedItems.contains($0.id ?? UUID()) }
+                    let allSelected = items.allSatisfy { viewModel.selectedItems.contains($0.id ?? UUID()) }
                     if allSelected {
-                        vm.items.forEach { viewModel.selectedItems.remove($0.id ?? UUID()) }
+                        items.forEach { viewModel.selectedItems.remove($0.id ?? UUID()) }
                     } else {
-                        vm.items.forEach { viewModel.selectedItems.insert($0.id ?? UUID()) }
+                        items.forEach { viewModel.selectedItems.insert($0.id ?? UUID()) }
                     }
                 }) {
-                    Image(systemName: vm.items.allSatisfy { viewModel.selectedItems.contains($0.id ?? UUID()) } ? "checkmark.circle.fill" : "circle")
+                    Image(systemName: items.allSatisfy { viewModel.selectedItems.contains($0.id ?? UUID()) } ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(.gray)
                         .frame(width: 24, height: 24)
                     
@@ -122,7 +122,7 @@ struct ItemSection: View {
     
         switch title {
             case "Expired": return Color.red
-            case "Expiring tomorrow": return Color.orange
+            case "Expiring Tomorrow": return Color.orange
     
         default:
             return Color.green

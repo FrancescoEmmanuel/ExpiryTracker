@@ -12,11 +12,16 @@ struct ItemCard: View {
     
     let item: ItemEntity
     
+    let fileManager = LocalFileManager.instance
+    
+    
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yy" // Change format as needed
         return formatter
     }()
+    
+    
     
     @State private var showDeleteAlert: Bool = false
  
@@ -36,13 +41,26 @@ struct ItemCard: View {
         VStack{
             
             HStack{
-                Image("mango").resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 44, height: 44)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                if let name = item.imgName, let image = fileManager.getImage(name: name) {
+                                   Image(uiImage: image)
+                                       .resizable()
+                                       .aspectRatio(contentMode: .fill)
+                                       .frame(width: 44, height: 44)
+                                       .clipShape(RoundedRectangle(cornerRadius: 8))
+                               } else {
+                                   Image(systemName: "photo.fill")
+                                       .resizable()
+                                       .scaleEffect(0.6)
+                                       .aspectRatio(contentMode: .fit)
+                                       .frame(width: 44, height: 44)
+                                       .foregroundColor(.gray)
+                                       .clipShape(RoundedRectangle(cornerRadius: 8))
+                                       .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 0.5))
+                               }
                 
                 VStack(alignment: .leading){
-                    Text(item.name ?? "Undefined").font(.system(size:16, weight:.medium))
+                    Text(item.name ?? "Undefåined").font(.system(size:16, weight:.medium))
                     Text(String("Quantity: \(item.qty)")).font( .system(size:15 ,weight: .regular)).foregroundColor(.gray)
                 }
                 Spacer()

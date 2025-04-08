@@ -93,14 +93,14 @@ class CoreDataVM: ObservableObject {
             return existingCategory
         } else {
             let newCategory = CategoryEntity(context: manager.context)
-            newCategory.name = "Uncategorised"
+            newCategory.name = "Uncategorized"
             saveData()
             return newCategory
         }
     }
     
     
-    func addItem(name: String, quantity: Int64, category: CategoryEntity?=nil, exp: Date) {
+    func addItem(name: String, quantity: Int64, category: CategoryEntity?=nil, exp: Date, image: UIImage?) {
             let newItem = ItemEntity(context: manager.context)
             newItem.id = UUID()
             newItem.name = name
@@ -108,6 +108,13 @@ class CoreDataVM: ObservableObject {
             newItem.exp = exp
             // categorygrouping is not an attribute of item, kita ga perlu define sbg attribute. meski item ada categorynya, kita ga harus define as attribute, krn category entity ud didefine relationshipnya sama item.
             newItem.categorygrouping = category ?? getDefaultCategory() // klo kosong catnya ywd getdefault (uncategorised)
+        
+            if let image = image {
+                let imageName = UUID().uuidString
+                LocalFileManager.instance.saveImg(image: image, name: imageName)
+                newItem.imgName = imageName
+            }
+        
             saveData()
         }
     
@@ -162,8 +169,8 @@ class CoreDataVM: ObservableObject {
     
     func saveData(){
         manager.saveData()
-        getItem()
-        getCategory()
+        self.getItem()
+        self.getCategory()
     }
     
     

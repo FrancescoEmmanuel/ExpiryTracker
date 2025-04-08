@@ -20,17 +20,17 @@ struct ImagePicker: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 150, height: 150)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
+                    .clipShape(RoundedRectangle(cornerRadius:8))
+                    .overlay(RoundedRectangle(cornerRadius:8).stroke(Color.gray, lineWidth: 2))
             } else {
                 Image(systemName: "photo.fill")
                     .resizable()
                     .scaleEffect(0.6)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 150, height: 150)
-                    .foregroundColor(.gray)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                    .foregroundColor(.white)
+                    .background(Color(hex: "#DADADA"))
+                    .clipShape(RoundedRectangle(cornerRadius:8))
             }
             
             PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {

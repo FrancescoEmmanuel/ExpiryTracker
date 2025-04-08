@@ -9,7 +9,11 @@ struct CategoryPage: View {
     @State private var showAddCategory = false
     @State private var categoryName: String = ""
     @State private var selectedImage: UIImage? = nil
-    @ObservedObject var vm = CoreDataVM()
+    @EnvironmentObject var vm: CoreDataVM
+
+    @Binding var showAddModal : Bool
+    @Binding var selectedCategory: CategoryEntity?
+    
     
 //    private let catData = CategoryModel.generateCategoryModel()
     let columns = [
@@ -27,7 +31,14 @@ struct CategoryPage: View {
                     LazyVGrid(columns: columns, spacing: 8) {
                         ForEach(vm.categories, id: \.self) { category in
                             CategoryCard(category: category, vm: vm)
-//                                    .border(Color.red) // debugging
+                                .onTapGesture{
+                                    if showAddModal == true {
+                                        selectedCategory = category
+                                        dismiss()
+                                    }
+                                
+                            }
+//
                         }
                     }
                     .padding()

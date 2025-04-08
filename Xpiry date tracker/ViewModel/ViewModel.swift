@@ -13,4 +13,5 @@ class ViewModel: ObservableObject {
     @Published var isEditing = false
     @Published var selectedItems: Set<UUID> = []
     @Published var sections = []
+
 }
