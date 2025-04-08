@@ -97,7 +97,7 @@ struct AddItemView: View {
                     Button("Done") {
                         
                         if itemName.isEmpty || quantity.isEmpty || selectedCategory == nil {
-                                showValidationSheet = true
+                               
                             } else {
                                 vm.addItem(
                                     name: itemName,
