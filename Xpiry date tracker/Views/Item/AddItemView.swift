@@ -96,9 +96,15 @@ struct AddItemView: View {
                     Spacer()
                     Button("Done") {
                         
-                        if itemName.isEmpty || quantity.isEmpty || selectedCategory == nil {
-                               
-                            } else {
+                            if selectedCategory == nil {
+                                vm.addItem(
+                                    name: itemName,
+                                    quantity: Int64(Int(quantity) ?? 0),
+                                    exp: dueDate,
+                                    image: selectedImage
+                                )
+                                
+                            }else{
                                 vm.addItem(
                                     name: itemName,
                                     quantity: Int64(Int(quantity) ?? 0),
@@ -106,8 +112,13 @@ struct AddItemView: View {
                                     exp: dueDate,
                                     image: selectedImage
                                 )
-                                dismiss()
+                                
+                                
+                                
+                               
                             }
+                        
+                        dismiss()
 
 
                         

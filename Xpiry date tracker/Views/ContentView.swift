@@ -44,7 +44,7 @@ struct ContentView: View {
                 
                 ScrollView{
                     VStack(alignment:.leading, spacing: 0) {
-                        HStack{
+                    
                             ScrollView(.horizontal, showsIndicators: false){
                                 HStack {
                                     CategoryButton(label: "All", selectedCategory: $selectedCategoryName)
@@ -52,25 +52,22 @@ struct ContentView: View {
                                     ForEach(vm.categories, id: \.self){ category in
                                         CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
                                         
+                                    Button {
+                                        showCategoryModal.toggle()
+                                    } label: {
+                                        Image(systemName: "plus").foregroundColor(.gray)
+                                        
+                                    }.padding() .background(Color.white.opacity(0.5))
+                                        .frame(maxWidth: .infinity)
+                                        .cornerRadius(40)
+                                        .frame(height:34)
+                                        .clipShape(.circle)
+                                        .padding(.bottom, 10)
+                                        
                                     }
                                     
                                 }
-                                
-                                
-                            }
-                            
-                            Button {
-                                showCategoryModal.toggle()
-                            } label: {
-                                Image(systemName: "square.grid.2x2").foregroundColor(.gray)
-                                
-                            }.padding() .background(Color.white.opacity(0.5))
-                                .frame(maxWidth: .infinity)
-                                .cornerRadius(40)
-                                .frame(height:34)
-                                .clipShape(.circle)
-                                .padding(.bottom, 10)
-                                    
+                
                         }.padding(.horizontal, 12)
                             .padding(.top, 20)
                         
@@ -162,11 +159,26 @@ struct ContentView: View {
 
                         
                         Button {
+                            if !viewModel.isEditing{
+                                showAddModal.toggle()
+                                
+                            }
+                            
+                        } label: {
+                            if !viewModel.isEditing{
+                                Image(systemName: "plus").foregroundColor(.black)
+                                
+                                
+                            }
+                            
+                        }
+                        
+                        Button {
                             if viewModel.isEditing{
                                 vm.items.forEach { viewModel.selectedItems.insert($0.id ?? UUID()) }
                                 
                             }else{
-                                showAddModal.toggle()
+                                showCategoryModal.toggle()
                                 
                             }
                             
@@ -175,7 +187,7 @@ struct ContentView: View {
                                 Text("Select All").foregroundColor(Color.myGreen)
                                 
                             } else{
-                                Image(systemName: "plus").foregroundColor(.black)
+                                Image(systemName: "square.grid.2x2").foregroundColor(.black)
                             }
                             
                         }
