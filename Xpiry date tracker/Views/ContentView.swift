@@ -44,37 +44,36 @@ struct ContentView: View {
                 
                 ScrollView{
                     VStack(alignment:.leading, spacing: 0) {
-                        ScrollView(.horizontal, showsIndicators: false){
-                            HStack {
-                                CategoryButton(label: "All", selectedCategory: $selectedCategoryName)
-                                
-                                ForEach(vm.categories, id: \.self){ category in
-                                    CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
+                        HStack{
+                            ScrollView(.horizontal, showsIndicators: false){
+                                HStack {
+                                    CategoryButton(label: "All", selectedCategory: $selectedCategoryName)
+                                    
+                                    ForEach(vm.categories, id: \.self){ category in
+                                        CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
+                                        
+                                    }
                                     
                                 }
                                 
                                 
-                                Button {
-                                    showCategoryModal.toggle()
-                                } label: {
-                                    Image(systemName: "plus").foregroundColor(.gray)
-                                }.padding() .background(Color.white.opacity(0.5))
-                                    .frame(maxWidth: .infinity)
-                                    .cornerRadius(40)
-                                    .frame(height:34)
-                                    .clipShape(.circle)
-                                    .padding(.bottom, 10)
-                                
-                                
-                                
-                                
                             }
-                            .padding(.horizontal, 12)
+                            
+                            Button {
+                                showCategoryModal.toggle()
+                            } label: {
+                                Image(systemName: "square.grid.2x2").foregroundColor(.gray)
+                                
+                            }.padding() .background(Color.white.opacity(0.5))
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(40)
+                                .frame(height:34)
+                                .clipShape(.circle)
+                                .padding(.bottom, 10)
+                                    
+                        }.padding(.horizontal, 12)
                             .padding(.top, 20)
-                            
-                            
-                            
-                        }
+                        
                         
                         
                         NavigationLink(destination: ContentView()){
@@ -152,13 +151,15 @@ struct ContentView: View {
                     }
                     ToolbarItemGroup {
                         
-                        NavigationLink(destination: SearchPage().environmentObject(vm).environmentObject(viewModel)) {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.black)
+                        if !viewModel.isEditing{
+                            NavigationLink(destination: SearchPage().environmentObject(vm).environmentObject(viewModel)) {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.black)
+                            }
+                            
                         }
-                        .disabled(viewModel.isEditing)
-                        
-                        
+                       
+
                         
                         Button {
                             if viewModel.isEditing{
@@ -170,10 +171,11 @@ struct ContentView: View {
                             }
                             
                         } label: {
-                            if !viewModel.isEditing{
-                                Image(systemName: "plus").foregroundColor(.black)
-                            } else{
+                            if viewModel.isEditing{
                                 Text("Select All").foregroundColor(Color.myGreen)
+                                
+                            } else{
+                                Image(systemName: "plus").foregroundColor(.black)
                             }
                             
                         }
