@@ -161,31 +161,24 @@ struct ContentView: View {
                         
                         
                         Button {
-                            showAddModal.toggle()
-                        } label: {
-                            if !viewModel.isEditing{
-                                Image(systemName: "plus").foregroundColor(.black)
-                            }
-                            
-                        }
-                        
-                        Button {
                             if viewModel.isEditing{
                                 vm.items.forEach { viewModel.selectedItems.insert($0.id ?? UUID()) }
                                 
                             }else{
-                                showCategoryModal.toggle()
+                                showAddModal.toggle()
+                                
                             }
-                            
                             
                         } label: {
-                            if viewModel.isEditing{
+                            if !viewModel.isEditing{
+                                Image(systemName: "plus").foregroundColor(.black)
+                            } else{
                                 Text("Select All").foregroundColor(Color.myGreen)
-                            }else{
-                                Image(systemName: "square.grid.2x2").foregroundColor(.black)
                             }
+                            
                         }
                     }
+                        
                 }
                 if viewModel.isEditing{
                     VStack{

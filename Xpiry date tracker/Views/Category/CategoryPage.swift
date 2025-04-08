@@ -61,15 +61,21 @@ struct CategoryPage: View {
                             .font(.system(size: 17))
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            showAddCategory = true
-                        } label: {
+                        NavigationLink(destination: AddCategory(vm: vm).navigationBarBackButtonHidden(true)) { 
                             Image(systemName: "plus")
                                 .foregroundStyle(Color(hex: "#0F8822"))
                         }
-                        .sheet(isPresented: $showAddCategory) {
-                            AddCategory(vm: vm)
-                        }
+                    
+                        
+                        // the following code is used when we want to open AddCategory as a modal
+//                        Button {
+//                        } label: {
+//                            Image(systemName: "plus")
+//                                .foregroundStyle(Color(hex: "#0F8822"))
+//                        }
+//                        .sheet(isPresented: $showAddCategory) {
+//                            AddCategory(vm: vm)
+//                        }
                     }
                     
                 }
