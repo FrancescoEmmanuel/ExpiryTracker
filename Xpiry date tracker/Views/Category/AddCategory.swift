@@ -43,8 +43,8 @@ struct AddCategory: View {
                     .padding(.vertical, 40)
                     Spacer()
                     Button(action: {
-                        isClicked.toggle() // Change state on click
-                        guard !categoryName.isEmpty else {return} // if null then ga add
+                        guard !categoryName.isEmpty else { return }
+                        isClicked = true // if null then ga add
                         vm.addCategory(name: categoryName, image: selectedImage)
                         categoryName = "" // kosongin lagi for next input
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // Small delay to ensure dismissal

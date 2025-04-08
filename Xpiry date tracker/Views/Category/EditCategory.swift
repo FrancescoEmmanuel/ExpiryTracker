@@ -16,6 +16,7 @@ struct EditCategory: View {
     @ObservedObject var vm: CoreDataVM // to access core data view model
     // declare category property
     @ObservedObject var category: CategoryEntity
+    @State private var originalCategoryName: String = ""
     
     let fileManager = LocalFileManager.instance
     let screenWidth = UIScreen.main.bounds.width
@@ -59,6 +60,9 @@ struct EditCategory: View {
                             let imageName = UUID().uuidString
                             fileManager.saveImg(image: image, name: imageName)
                             vm.updateCategoryImage(category: category, imageName: imageName)
+                        }
+                        if categoryName != originalCategoryName {
+                            vm.updateCategory(category: category, newName: categoryName)
                         }
                         categoryName = "" // kosongin lagi for next input
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // Small delay to ensure dismissal
@@ -107,6 +111,8 @@ struct EditCategory: View {
             if selectedImage == nil, let imageName = category.imgName {
                 selectedImage = fileManager.getImage(name: imageName)
             }
+            originalCategoryName = category.name ?? ""
+            categoryName = originalCategoryName
         }
 
     }
