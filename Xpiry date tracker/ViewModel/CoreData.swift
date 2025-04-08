@@ -62,6 +62,7 @@ class CoreDataVM: ObservableObject {
         }
     }
     
+    
     func getCategory(){
         let request = NSFetchRequest<CategoryEntity>(entityName: "CategoryEntity")
         

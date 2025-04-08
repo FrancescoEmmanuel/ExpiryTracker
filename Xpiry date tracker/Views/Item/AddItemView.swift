@@ -149,7 +149,7 @@ struct AddItemView: View {
 
             Button("Keep Editing", role: .cancel) {
                 // do nothing, just dismiss the dialog
-            }
+            }.foregroundColor(Color.myGreen)
         }
     }
 }

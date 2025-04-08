@@ -22,7 +22,7 @@ struct ItemCard: View {
     }()
     
     
-    
+    @State private var isEditingItem = false
     @State private var showDeleteAlert: Bool = false
  
     
