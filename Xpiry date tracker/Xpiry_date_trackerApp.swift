@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct Xpiry_date_trackerApp: App {
+    
+    init() {
+        NotifManager.instance.requestAuthorization()
+    }
+    
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {

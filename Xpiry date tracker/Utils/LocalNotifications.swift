@@ -101,19 +101,19 @@ class NotifManager {
 
 
 
-struct LocalNotifications: View{
-    var body: some View {
-        VStack(spacing: 40){
-            Button("Request permission") {
-                NotifManager.instance.requestAuthorization()
-            }
-        }
-    }
-}
-
-
-struct LocalNotifications_Preview: PreviewProvider{
-    static var previews: some View{
-        LocalNotifications()
-    }
-}
+//struct LocalNotifications: View{
+//    var body: some View {
+//        VStack(spacing: 40){
+//            Button("Request permission") {
+//                NotifManager.instance.requestAuthorization()
+//            }
+//        }
+//    }
+//}
+//
+//
+//struct LocalNotifications_Preview: PreviewProvider{
+//    static var previews: some View{
+//        LocalNotifications()
+//    }
+//}
