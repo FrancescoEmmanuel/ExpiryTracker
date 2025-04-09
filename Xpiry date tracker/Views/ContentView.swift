@@ -155,7 +155,7 @@ struct ContentView: View {
                         
                         Button {
                             if !viewModel.isEditing{
-                                viewModel.showAddModal.toggle()
+                                viewModel.showAddModal = true
                 
                             }
                             

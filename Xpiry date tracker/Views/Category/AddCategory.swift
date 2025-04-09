@@ -72,6 +72,7 @@ struct AddCategory: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         dismiss()
+                    
                     }) {
                         HStack {
                             Image(systemName: "chevron.left") // back icon
