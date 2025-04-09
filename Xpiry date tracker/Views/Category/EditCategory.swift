@@ -72,6 +72,7 @@ struct EditCategory: View {
                     }) {
                         Text("Done")
                             .foregroundStyle(Color(hex: "#0F8822"))
+                            .fontWeight(.semibold)
                             
                     }
                     .disabled(isClicked)
@@ -103,6 +104,7 @@ struct EditCategory: View {
                 ToolbarItem(placement: .principal) { // Center-aligned title
                     Text("Edit Category")
                         .font(.system(size: 17))
+                        .fontWeight(.semibold)
                 }
             }
             
