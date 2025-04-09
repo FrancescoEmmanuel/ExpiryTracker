@@ -18,9 +18,9 @@ class CoreDataManager {
         container.loadPersistentStores{
             (_, error) in
             if let error = error {
-                print("Error in loading core data. \(error)") // debugging. most likely error in container name
+//                print("Error in loading core data. \(error)") // debugging. most likely error in container name
             } else {
-                print("sucessfully loaded core data.") // debugging. look at terminal.
+//                print("sucessfully loaded core data.") // debugging. look at terminal.
             }
         }
         context = container.viewContext
@@ -30,9 +30,9 @@ class CoreDataManager {
         do{
             try context.save()
 //            fetchItems() // we need to update published var everytime we save (biar UI ganti) jd panggil fetch func lagi bcs when we call this func, it'll call a fetch request and put it into the published var
-            print("saved successfully")
+//            print("saved successfully")
         } catch let error {
-            print("error saving core data. \(error)") //debugging.
+//            print("error saving core data. \(error)") //debugging.
         }
     }
     
@@ -58,7 +58,7 @@ class CoreDataVM: ObservableObject {
         do{
             items = try manager.context.fetch(request)
         } catch let error {
-            print("error fetching items. \(error)")
+//            print("error fetching items. \(error)")
         }
     }
     
@@ -77,7 +77,7 @@ class CoreDataVM: ObservableObject {
         do{
             categories = try manager.context.fetch(request)
         } catch let error {
-            print("error fetching. \(error)")
+//            print("error fetching. \(error)")
         }
     }
     

@@ -17,6 +17,8 @@ struct EditCategory: View {
     // declare category property
     @ObservedObject var category: CategoryEntity
     @State private var originalCategoryName: String = ""
+    @State private var showValidationSheet = false
+    @State private var showErrorHandling = false
     
     let fileManager = LocalFileManager.instance
     let screenWidth = UIScreen.main.bounds.width
@@ -31,9 +33,6 @@ struct EditCategory: View {
     var body: some View {
         NavigationStack{
             ZStack{
-                Color.clear
-                    .background(.ultraThinMaterial) // Apple's blur effect
-                    .ignoresSafeArea()
                 VStack {
                     ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo")
                     HStack {
@@ -54,7 +53,9 @@ struct EditCategory: View {
                     .padding(.vertical, 40)
                     Spacer()
                     Button(action: {
-                        guard !categoryName.isEmpty else { return }
+                        guard !categoryName.isEmpty else {
+                            showErrorHandling = true
+                            return }
                         isClicked = true // Disables button immediately
                         if let image = selectedImage {
                             let imageName = UUID().uuidString
@@ -91,7 +92,11 @@ struct EditCategory: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        dismiss()
+                        if categoryName != originalCategoryName {
+                            showValidationSheet = true
+                        } else {
+                            dismiss()
+                        }
                     }) {
                         HStack {
                             Image(systemName: "chevron.left") // back icon
@@ -115,6 +120,23 @@ struct EditCategory: View {
             }
             originalCategoryName = category.name ?? ""
             categoryName = originalCategoryName
+        }
+        .interactiveDismissDisabled(true)
+        .alert("Please provide a category name.", isPresented: $showErrorHandling) {
+                   Button("OK", role: .cancel) {
+                       showErrorHandling = false
+                   }
+               }
+        
+        .confirmationDialog("Discard changes?", isPresented: $showValidationSheet, titleVisibility: .visible) {
+            
+            Button("Discard Changes", role: .destructive) {
+                dismiss()
+            }
+
+            Button("Keep Editing", role: .cancel) {
+                // do nothing, just dismiss the dialog
+            }.foregroundColor(Color.myGreen)
         }
 
     }
