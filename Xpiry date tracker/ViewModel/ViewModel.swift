@@ -16,3 +16,4 @@ class ViewModel: ObservableObject {
     @Published var showAddModal: Bool = false
 
 }
+

@@ -54,8 +54,7 @@ struct CategoryCard: View {
                             }
                             
                             Button(role: .destructive, action: {
-                                isClicked.toggle() // Change state on click
-                                vm.deleteCategory(category)
+                                isClicked = true
                                 
                             }) {
                                 Label("Delete", systemImage: "trash")
@@ -68,6 +67,7 @@ struct CategoryCard: View {
                         .sheet(isPresented: $showEditCategory) {
                             EditCategory(category: category, vm: vm)
                         }
+                        
                         
                     }
                     .padding(.horizontal)
@@ -83,6 +83,10 @@ struct CategoryCard: View {
                     
                 }
                 .frame(width: 185, height: 84)
+            }.alert(isPresented: $isClicked) {
+                Alert(title: Text("Delete Category?"), message: Text("Are you sure you want to delete this category? It will be removed permanently."), primaryButton: .destructive(Text("Delete")){
+                    vm.deleteCategory(category)
+                }, secondaryButton: .cancel())
             }
         }
 }

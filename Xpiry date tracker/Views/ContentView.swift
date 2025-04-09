@@ -51,8 +51,7 @@ struct ContentView: View {
                                     ForEach(vm.categories, id: \.self){ category in
                                         CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
                                         
-                                  
-                                        
+
                                     }
                                     
                                     Button {

@@ -46,6 +46,7 @@ struct CategoryPage: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
                             dismiss() // Close the modal
+                            selectedCategory = nil
                         }) {
                             HStack {
                                 Image(systemName: "chevron.left") // back icon
