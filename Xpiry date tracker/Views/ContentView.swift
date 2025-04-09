@@ -72,7 +72,7 @@ struct ContentView: View {
                             
                             HStack{
                                 Image(systemName: "bin.xmark.fill").frame(width: 23, height: 19).foregroundColor(.myGray)
-                                Text("Archived").font(.system(size: 16)).foregroundColor(.myGray)
+                                Text("Archived").fontWeight(.medium).font(.system(size: 16)).foregroundColor(.myGray)
                                 Spacer()
                                 
                             }
