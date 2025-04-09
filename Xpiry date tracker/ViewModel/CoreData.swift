@@ -88,7 +88,7 @@ class CoreDataVM: ObservableObject {
     
     private func getDefaultCategory() -> CategoryEntity {
         let request = NSFetchRequest<CategoryEntity>(entityName: "CategoryEntity")
-        request.predicate = NSPredicate(format: "name == %@", "Uncategorised")
+        request.predicate = NSPredicate(format: "name == %@", "Uncategorized")
         
         if let existingCategory = try? manager.context.fetch(request).first{
             return existingCategory
