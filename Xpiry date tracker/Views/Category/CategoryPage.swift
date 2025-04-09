@@ -112,6 +112,7 @@ struct CategoryPage: View
         }
         .interactiveDismissDisabled(true)
         .searchable(text: $searchText, prompt: "Search category")
+       
         
         
         

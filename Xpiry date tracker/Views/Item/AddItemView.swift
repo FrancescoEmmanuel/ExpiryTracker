@@ -59,7 +59,14 @@ struct AddItemView: View {
                                 .frame(width: 100, alignment: .leading)
                             Spacer ()
                             TextField("Quantity", text: $quantity)
-                                .keyboardType(.numberPad)
+                                .keyboardType(.numberPad).toolbar {
+                                    ToolbarItemGroup(placement: .keyboard) {
+                                        Spacer()
+                                        Button("Done") {
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        }.foregroundColor(Color.myGreen)
+                                    }
+                                }
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.leading)
                                 .onChange(of: quantity) {
@@ -84,7 +91,7 @@ struct AddItemView: View {
                                     .foregroundColor(.gray)
                                 
                             }
-                            
+               
                         }
                         Divider()
                         HStack {
@@ -148,8 +155,8 @@ struct AddItemView: View {
                 }
             }
 //            .navigationBarTitle(Text("Add Items") .fontWeight(.semibold))
-//            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
                 
             
