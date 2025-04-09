@@ -217,6 +217,27 @@ struct ContentView: View {
                             } label:{ Text("Move")
                                 
                             }.disabled(viewModel.selectedItems.isEmpty)
+//                                .alert(isPresented: $showDeleteAlert) {
+//                                    Alert(
+//                                        title: Text("Move Items?"),
+//                                        message: Text("Are you sure you want to move these items?"),
+//                                        primaryButton: (Text("Move")) {
+//                                            showCategoryModal = true},
+//                                        secondaryButton: .cancel()
+//                                    )
+//                                }
+//                                .sheet(isPresented: $showCategoryModal) {
+//                                    CategoryPage( selectedCategory: $selectedCategory).environmentObject(vm) {
+//                                        if let category = selectedCategory {
+//                                            viewModel.selectedItems.forEach { item in
+//                                                if let itemToMove = vm.items.first(where: { $0.id == item }) {
+//                                                    vm.updateItem(entity: itemToMove, newCategory: category)
+//                                                }
+//                                            }
+//                                            viewModel.isEditing.toggle()
+//                                        }
+//                                    }
+//                                }
                             
                             Spacer()
                             

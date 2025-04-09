@@ -24,9 +24,9 @@ class LocalFileManager {
         if !FileManager.default.fileExists(atPath: path) {
             do{
                 try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-                print("successfully created folder.")
+//                print("successfully created folder.")
             } catch let error {
-                print("error creating folder. \(error)")
+//                print("error creating folder. \(error)")
             }
         }
             
@@ -39,9 +39,9 @@ class LocalFileManager {
         }
         do{
             try FileManager.default.removeItem(atPath: path)
-            print("successfully deleted folder.")
+//            print("successfully deleted folder.")
         } catch let error {
-            print("error deleting folder. \(error)")
+//            print("error deleting folder. \(error)")
         }
     }
     
@@ -51,15 +51,15 @@ class LocalFileManager {
             let data = image.jpegData(compressionQuality: 1.0),
             let path = getPathForImage(name: name)
         else {
-            print("error getting data") // debugging. look at terminal
+//            print("error getting data") // debugging. look at terminal
             return
         }
         
         do {
             try data.write(to: path)
-            print("successfully saved image")
+//            print("successfully saved image")
         } catch let error {
-            print("error saving image. \(error)")
+//            print("error saving image. \(error)")
         }
         
     }
@@ -69,7 +69,7 @@ class LocalFileManager {
         guard
             let path = getPathForImage(name: name)?.path,
             FileManager.default.fileExists(atPath: path) else {
-            print("error getting path.")
+//            print("error getting path.")
             return nil
         }
         return UIImage(contentsOfFile: path)
@@ -80,14 +80,14 @@ class LocalFileManager {
         guard
             let path = getPathForImage(name: name)?.path,
             FileManager.default.fileExists(atPath: path) else {
-            print("error getting path.")
+//            print("error getting path.")
             return
         }
         do{
             try FileManager.default.removeItem(atPath: path)
-            print("successfully deleted")
+//            print("successfully deleted")
         } catch let error {
-            print("error deleting image. \(error)")
+//            print("error deleting image. \(error)")
         }
     }
     
@@ -95,7 +95,7 @@ class LocalFileManager {
         guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
             .appendingPathComponent(folderName)
             .appendingPathComponent("\(name).jpg") else {
-            print("error getting image path")
+//            print("error getting image path")
             return nil
         }
         return path

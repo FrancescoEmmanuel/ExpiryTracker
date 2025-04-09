@@ -12,6 +12,8 @@ struct AddCategory: View {
     @State private var categoryName: String = ""
     @State private var selectedImage: UIImage? = nil
     @State private var isClicked = false
+    @State private var showValidationSheet = false
+    @State private var showErrorHandling = false
     @ObservedObject var vm: CoreDataVM
     
     let screenWidth = UIScreen.main.bounds.width
@@ -20,9 +22,9 @@ struct AddCategory: View {
     var body: some View {
         NavigationStack{
             ZStack{
-                Color.clear
-                    .background(.ultraThinMaterial) // Apple's blur effect
-                    .ignoresSafeArea()
+//                Color.clear
+//                    .background(.ultraThinMaterial) // Apple's blur effect
+//                    .ignoresSafeArea()
                 VStack {
                     ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo")
                     HStack {
@@ -43,7 +45,9 @@ struct AddCategory: View {
                     .padding(.vertical, 40)
                     Spacer()
                     Button(action: {
-                        guard !categoryName.isEmpty else { return }
+                        guard !categoryName.isEmpty else {
+                            showErrorHandling = true
+                            return }
                         isClicked = true // if null then ga add
                         vm.addCategory(name: categoryName, image: selectedImage)
                         categoryName = "" // kosongin lagi for next input
@@ -72,8 +76,11 @@ struct AddCategory: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        dismiss()
-                    
+                        if !categoryName.isEmpty {
+                            showValidationSheet = true
+                        } else {
+                            dismiss()
+                        }
                     }) {
                         HStack {
                             Image(systemName: "chevron.left") // back icon
@@ -90,6 +97,24 @@ struct AddCategory: View {
                 }
             }
             
+        }
+        .interactiveDismissDisabled(true)
+        .alert("Please provide a category name.", isPresented: $showErrorHandling) {
+                   Button("OK", role: .cancel) {
+                       showErrorHandling = false
+                   }
+               }
+        
+        .confirmationDialog("Discard changes?", isPresented: $showValidationSheet, titleVisibility: .visible) {
+            
+            Button("Discard Changes", role: .destructive) {
+                dismiss()
+                
+            }
+
+            Button("Keep Editing", role: .cancel) {
+                // do nothing, just dismiss the dialog
+            }.foregroundColor(Color.myGreen)
         }
     }
 }

@@ -99,7 +99,7 @@ struct AddItemView: View {
                     
                     Button("Done") {
                         
-                        guard !itemName.isEmpty, !quantity.isEmpty else {
+                        guard !itemName.isEmpty || !quantity.isEmpty else {
                                 showErrorHandling = true
                                 return
                             }
@@ -137,24 +137,25 @@ struct AddItemView: View {
             .frame(alignment: .center)
             .background(Color(.systemGroupedBackground))
             .toolbar{
-                //                ToolbarItem (placement: .principal) {
-                //                    Text("Add Items")
-                //                }
+                ToolbarItem (placement: .principal) {
+                    Text("Add Items")
+                        .fontWeight(.semibold)
+                }
                 ToolbarItem (placement: .navigationBarLeading){
                     Button("Cancel") {
                         showValidationSheet = true
                     }.foregroundColor(Color.myGreen)
                 }
             }
-            .navigationBarTitle(Text("Add Items") .fontWeight(.semibold))
-            .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarTitle(Text("Add Items") .fontWeight(.semibold))
+//            .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
                 
             
         }
         .interactiveDismissDisabled(true)
-        .alert("Please fill all the fields.", isPresented: $showErrorHandling) {
+        .alert("Please fill in all the fields.", isPresented: $showErrorHandling) {
                    Button("OK", role: .cancel) {
                        showErrorHandling = false
                    }

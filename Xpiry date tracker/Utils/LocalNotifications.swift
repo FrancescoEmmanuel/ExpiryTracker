@@ -16,11 +16,11 @@ class NotifManager {
     func requestAuthorization(){
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         UNUserNotificationCenter.current().requestAuthorization(options: options) {success, error in
-            if let error = error {
-                print("ERROR NOTIF: \(error)")
-            } else {
-                print ("success notif")
-            }
+//            if let error = error {
+//                print("ERROR NOTIF: \(error)")
+//            } else {
+//                print ("success notif")
+//            }
             
         }
     }
@@ -67,20 +67,23 @@ class NotifManager {
         content.sound = .default
 //        content.badge = 1
         
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        dateComponents.hour = 7
+        dateComponents.minute = 0
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("ERROR NOTIF: \(error)")
-            }
+//            if let error = error {
+//                print("ERROR NOTIF: \(error)")
+//            }
         }
         
     }
     
     private func scheduleDailyNotifPostExp (title: String, body: String, startDate: Date, identifier: String){
-        var dateComponents = Calendar.current.dateComponents([.hour, .minute], from: startDate)
+        var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: startDate)
+        dateComponents.hour = 7
         dateComponents.second = 0
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let content = UNMutableNotificationContent()
@@ -91,9 +94,9 @@ class NotifManager {
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Repeating notification error: \(error)")
-            }
+//            if let error = error {
+//                print("Repeating notification error: \(error)")
+//            }
         }
         
     }
