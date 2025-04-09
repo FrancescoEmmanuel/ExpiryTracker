@@ -4,21 +4,36 @@
 import SwiftUI
 
 
-struct CategoryPage: View {
+struct CategoryPage: View
+{
     @Environment(\.dismiss) private var dismiss // To close the modal
     @State private var showAddCategory = false
     @State private var categoryName: String = ""
     @State private var selectedImage: UIImage? = nil
+    @State private var searchText = ""
     @EnvironmentObject var vm: CoreDataVM
-
+    
     @Binding var selectedCategory: CategoryEntity?
     
+    
     @StateObject private var viewModel = ViewModel()
-//    private let catData = CategoryModel.generateCategoryModel()
+    
+    var filteredCategories: [CategoryEntity] {
+        if searchText.isEmpty {
+            return vm.categories
+        } else {
+            return vm.categories.filter {
+                $0.name?.localizedCaseInsensitiveContains(searchText) ?? false
+            }
+        }
+    }
+    
+    
+    //    private let catData = CategoryModel.generateCategoryModel()
     let columns = [
-            GridItem(.flexible(), spacing: 8),
-            GridItem(.flexible(), spacing: 8)
-        ]
+        GridItem(.flexible(), spacing: 8),
+        GridItem(.flexible(), spacing: 8)
+    ]
     
     var body: some View {
         NavigationStack { // Wrap in NavigationStack for in-modal navigation
@@ -27,25 +42,32 @@ struct CategoryPage: View {
                     .ignoresSafeArea()
                     .blur(radius: 10)
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 8) {
-                        ForEach(vm.categories, id: \.self) { category in
-                            CategoryCard(category: category, vm: vm)
-                                .onTapGesture{
-                                    
-                                        selectedCategory = category
-                                        dismiss()
-                                    
-                                
+                    
+                    LazyVGrid (columns: columns, spacing: 8){
+                        if filteredCategories.isEmpty {
+                            Text("No results found")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .padding(.top, 250)
+                        } else {
+                            ForEach(filteredCategories, id:\.self) { category in
+                                CategoryCard(category: category, vm: vm)
+                                    .onTapGesture{
+                                        
+                                            selectedCategory = category
+                                            dismiss()
+                                        
+                                    }
                             }
-//
                         }
                     }
                     .padding()
                 }
+                
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
-                            dismiss() // Close the modal
+                            dismiss()
                             selectedCategory = nil
                         }) {
                             HStack {
@@ -61,28 +83,34 @@ struct CategoryPage: View {
                             .font(.system(size: 17))
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: AddCategory(vm: vm).navigationBarBackButtonHidden(true)) { 
+                        NavigationLink(destination: AddCategory(vm: vm).navigationBarBackButtonHidden(true)) {
                             Image(systemName: "plus")
                                 .foregroundStyle(Color(hex: "#0F8822"))
                         }
-                    
+                        
                         
                         // the following code is used when we want to open AddCategory as a modal
-//                        Button {
-//                        } label: {
-//                            Image(systemName: "plus")
-//                                .foregroundStyle(Color(hex: "#0F8822"))
-//                        }
-//                        .sheet(isPresented: $showAddCategory) {
-//                            AddCategory(vm: vm)
-//                        }
+                        //                        Button {
+                        //                        } label: {
+                        //                            Image(systemName: "plus")
+                        //                                .foregroundStyle(Color(hex: "#0F8822"))
+                        //                        }
+                        //                        .sheet(isPresented: $showAddCategory) {
+                        //                            AddCategory(vm: vm)
+                        //                        }
                     }
                     
                 }
             }
             
             
-        }.interactiveDismissDisabled(true)
+        }
+        .interactiveDismissDisabled(true)
+        .searchable(text: $searchText, prompt: "Search category")
+        
+        
+        
+        
     }
 }
  

@@ -115,7 +115,7 @@ class CoreDataVM: ObservableObject {
                 LocalFileManager.instance.saveImg(image: image, name: imageName)
                 newItem.imgName = imageName
             }
-        
+            NotifManager.instance.scheduleNotification(for: newItem)
             saveData()
         }
     
@@ -164,6 +164,13 @@ class CoreDataVM: ObservableObject {
             entity.imgName = imageName
         }
 
+
+        if entity.qty == 0 {
+            NotifManager.instance.cancelNotif(for: entity)
+        } else {
+            NotifManager.instance.scheduleNotification(for: entity)
+        }
+
         saveData()
     }
 
@@ -174,6 +181,7 @@ class CoreDataVM: ObservableObject {
     }
     
     func deleteItem(_ item: ItemEntity){
+        NotifManager.instance.cancelNotif(for: item)
         manager.context.delete(item)
         saveData()
     }
