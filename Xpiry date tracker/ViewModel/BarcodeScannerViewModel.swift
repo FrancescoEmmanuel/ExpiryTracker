@@ -21,6 +21,7 @@ enum DataScannerAccessStatusType{
 final class BarcodeScannerViewModel: ObservableObject {
     @Published var dataScannerAccessStatus: DataScannerAccessStatusType = .notDetermined
     
+    @Published var recognizedItems: [RecognizedItem] = []
     private var isScannerAvailable: Bool {
         DataScannerViewController.isAvailable && DataScannerViewController.isSupported
     }

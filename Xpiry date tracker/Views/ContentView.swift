@@ -68,7 +68,7 @@ struct ContentView: View {
                         
                         
                         
-                        NavigationLink(destination: ContentView()){
+                        NavigationLink(destination: ArchivePage(vm:vm)){
                             
                             HStack{
                                 Image(systemName: "bin.xmark.fill").frame(width: 23, height: 19).foregroundColor(.myGray)
@@ -93,6 +93,7 @@ struct ContentView: View {
                         VStack(spacing:0){
                             
                             let filteredItems = vm.items.filter { item in
+                                guard item.archived == false else { return false }
                                 switch viewModel.selectedCategoryName {
                                 case "All":
                                     return true
@@ -194,7 +195,19 @@ struct ContentView: View {
                         Spacer()
                         HStack{
                             Button{
+                                
+                                viewModel.selectedItems.forEach { item in
+                                    if let itemToArchive = vm.items.first(where: { $0.id == item }) {
+                                        vm.toggleArchiveItem(itemToArchive)
+                                    }
+                                }
+                                viewModel.selectedItems.removeAll()
+                                
+                                viewModel.isEditing.toggle()
+                                
                             } label:{ Text("Archive")
+                                
+                                
                                 
                             }.disabled(viewModel.selectedItems.isEmpty)
                             

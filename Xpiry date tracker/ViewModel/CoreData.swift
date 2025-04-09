@@ -107,6 +107,7 @@ class CoreDataVM: ObservableObject {
             newItem.name = name
             newItem.qty = quantity
             newItem.exp = exp
+            newItem.archived = false
             // categorygrouping is not an attribute of item, kita ga perlu define sbg attribute. meski item ada categorynya, kita ga harus define as attribute, krn category entity ud didefine relationshipnya sama item.
             newItem.categorygrouping = category ?? getDefaultCategory() // klo kosong catnya ywd getdefault (uncategorised)
         
@@ -187,6 +188,24 @@ class CoreDataVM: ObservableObject {
     }
     
     // klo mau pas panggil function ga nulis deleteItem(item:..) bisa pke code func deleteItem(_ item: ItemEntity). klo ada _ di depan -> pas manggil function tinggal deleteItem(barangnyaapa). pke klo ud jelas yg lu mau pass data apa
+    func getArchivedItems() -> [ItemEntity] {
+        let request = NSFetchRequest<ItemEntity>(entityName: "ItemEntity")
+        request.predicate = NSPredicate(format: "archived == %@", NSNumber(value: true))
+
+        do {
+            return try manager.context.fetch(request)
+        } catch let error {
+            print("Error fetching archived items: \(error)")
+            return []
+        }
+    }
+
+    
+    func toggleArchiveItem(_ item: ItemEntity) {
+        item.archived.toggle()
+        saveData()
+    }
+
     
     func updateCategoryImage(category: CategoryEntity, imageName: String) {
         category.imgName = imageName

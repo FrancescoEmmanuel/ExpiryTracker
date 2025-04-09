@@ -92,7 +92,8 @@ struct ItemCard: View {
             }
             
             Button{
-                print("archive")
+                    vm.toggleArchiveItem(item)
+                
                 
             } label:{ Image(systemName:"bin.xmark.fill").tint(.myBlue) }
             

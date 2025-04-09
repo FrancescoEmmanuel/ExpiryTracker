@@ -5,6 +5,9 @@ struct SearchPage: View {
     @EnvironmentObject var viewModel: ViewModel
     
     @State private var searchText = ""
+    @State private var showEditModal: Bool = false
+    @State private var selectedItem: ItemEntity? = nil
+    @State private var selectedCategory: CategoryEntity? = nil
 
     var filteredItems: [ItemEntity] {
         
@@ -28,6 +31,13 @@ struct SearchPage: View {
                             ForEach(filteredItems, id: \.self) { item in
                                 ItemCard(item: item, vm: vm)
                                     .padding(.horizontal)
+                                    .onTapGesture {
+                        
+                                        selectedItem = item
+                                        selectedCategory = item.categorygrouping
+                                        showEditModal = true
+                                        
+                                    }
                                 Divider()
                             }
                         }
@@ -45,6 +55,13 @@ struct SearchPage: View {
         }
         .tint(Color.myGreen)
         .background(Color.background)
+        .sheet(isPresented: $showEditModal) {
+            EditItemView(
+                selectedCategory: $selectedCategory,
+                itemToEdit: $selectedItem
+            )
+            .environmentObject(vm)
+        }
     }
 }
 
