@@ -94,23 +94,23 @@ struct CategoryCard: View {
         }
 }
 
-
-#Preview {
-    let previewContext = CoreDataManager.instance.context
-        let sampleCategory: CategoryEntity = {
-            let category = CategoryEntity(context: previewContext)
-            category.name = nil
-
-            let item1 = ItemEntity(context: previewContext)
-            item1.name = "Milk"
-            item1.categorygrouping = category
-
-            let item2 = ItemEntity(context: previewContext)
-            item2.name = "Tea"
-            item2.categorygrouping = category
-
-            category.items = NSSet(array: [item1, item2])
-            return category
-        }()
-
-        return CategoryCard(category: sampleCategory, vm: CoreDataVM())}
+//
+//#Preview {
+//    let previewContext = CoreDataManager.instance.context
+//        let sampleCategory: CategoryEntity = {
+//            let category = CategoryEntity(context: previewContext)
+//            category.name = nil
+//
+//            let item1 = ItemEntity(context: previewContext)
+//            item1.name = "Milk"
+//            item1.categorygrouping = category
+//
+//            let item2 = ItemEntity(context: previewContext)
+//            item2.name = "Tea"
+//            item2.categorygrouping = category
+//
+//            category.items = NSSet(array: [item1, item2])
+//            return category
+//        }()
+//
+//        return CategoryCard(category: sampleCategory, vm: CoreDataVM())}

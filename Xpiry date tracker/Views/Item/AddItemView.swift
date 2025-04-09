@@ -144,13 +144,12 @@ struct AddItemView: View {
                     Button("Cancel") {
                         showValidationSheet = true
                     }.foregroundColor(Color.myGreen)
-                        .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
-                        .toolbarBackground(.visible, for: .navigationBar)
-
                 }
             }
             .navigationBarTitle(Text("Add Items") .fontWeight(.semibold))
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
                 
             
         }
