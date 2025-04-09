@@ -6,8 +6,6 @@ struct ContentView: View {
     
     @StateObject var vm = CoreDataVM()
     
-    
-    
     @State private var selectedCategory: CategoryEntity?
     @State private var selectedCategoryName: String = "All"
     
@@ -15,10 +13,6 @@ struct ContentView: View {
     @State private var showCategoryModal = false
     @State private var showDeleteAlert: Bool = false
     @State private var showAddModal = false
-    
-    
-    
-    
     
     
     

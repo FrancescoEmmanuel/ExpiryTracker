@@ -9,11 +9,21 @@ struct CategoryPage: View {
     @State private var showAddCategory = false
     @State private var categoryName: String = ""
     @State private var selectedImage: UIImage? = nil
+    @State private var searchText = ""
     @EnvironmentObject var vm: CoreDataVM
 
     @Binding var showAddModal : Bool
     @Binding var selectedCategory: CategoryEntity?
     
+    var filteredCategories: [CategoryEntity] {
+        if searchText.isEmpty {
+            return vm.categories
+        } else {
+            return vm.categories.filter {
+                $0.name?.localizedCaseInsensitiveContains(searchText) ?? false
+            }
+        }
+    }
     
 //    private let catData = CategoryModel.generateCategoryModel()
     let columns = [
@@ -28,21 +38,27 @@ struct CategoryPage: View {
                     .ignoresSafeArea()
                     .blur(radius: 10)
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 8) {
-                        ForEach(vm.categories, id: \.self) { category in
-                            CategoryCard(category: category, vm: vm)
-                                .onTapGesture{
-                                    if showAddModal == true {
-                                        selectedCategory = category
-                                        dismiss()
+                    LazyVGrid (columns: columns, spacing: 8){
+                        if filteredCategories.isEmpty {
+                            Text("No results found")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .padding(.top, 250)
+                        } else {
+                            ForEach(filteredCategories, id:\.self) { category in
+                                CategoryCard(category: category, vm: vm)
+                                    .onTapGesture{
+                                        if showAddModal == true {
+                                            selectedCategory = category
+                                            dismiss()
+                                        }
                                     }
-                                
+                                }
                             }
-//
                         }
-                    }
                     .padding()
-                }
+                    }
+                
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
@@ -83,6 +99,7 @@ struct CategoryPage: View {
             
             
         }
+        .searchable(text: $searchText, prompt: "Search category")
     }
 }
  
