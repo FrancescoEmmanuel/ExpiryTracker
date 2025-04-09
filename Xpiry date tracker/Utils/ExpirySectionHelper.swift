@@ -29,13 +29,13 @@ func groupItemsByExpiry(_ items: [ItemEntity]) -> [String: [ItemEntity]] {
         let section: String
         
         if daysLeft <= 0 {
-            section = "Expired"
+            section = "PAST DUE"
         } else if daysLeft == 1 {
-            section = "Expiring Tomorrow"
+            section = "DUE TOMORROW"
         } else if daysLeft <= 7 {
-            section = "Expiring in \(daysLeft) Days"
+            section = "DUE IN \(daysLeft) DAYS"
         } else {
-            section = "Expiring Later"
+            section = "FAR FROM DUE"
         }
         
         sectionedItems[section, default: []].append(item)

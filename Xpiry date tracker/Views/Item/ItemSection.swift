@@ -142,11 +142,11 @@ struct ItemSection: View {
     private func determineColor(title : String) -> Color {
     
         switch title {
-            case "Expired": return Color.red
-            case "Expiring Tomorrow": return Color.orange
+            case "PAST DUE": return Color.red
+            case "DUE TOMORROW": return Color.orange
     
         default:
-            return Color.green
+            return Color.myGray
         }
     }
     
