@@ -48,8 +48,7 @@ struct CategoryCard: View {
                             }
                             
                             Button(role: .destructive, action: {
-                                isClicked.toggle() // Change state on click
-                                vm.deleteCategory(category)
+                                isClicked = true
                                 
                             }) {
                                 Label("Delete", systemImage: "trash")
@@ -63,12 +62,13 @@ struct CategoryCard: View {
                             EditCategory(category: category, vm: vm)
                         }
                         
+                        
                     }
                     .padding(.horizontal, 8)
                     .padding(.top, 8)
             HStack (spacing: 8) {
                         Text(category.name ?? "Uncategorized")
-                    .frame(width: 115.5, alignment: .leading)
+                            .frame(width: 115.5, alignment: .leading)
                             .font(.system(size:16))
                             .fontWeight(.medium)
                             .multilineTextAlignment(.leading)
@@ -82,11 +82,15 @@ struct CategoryCard: View {
                     }
                     .padding(.bottom, 8)
     
-                }
-        .background(Color.white)
+                }.background(Color.white)
                 .frame(width: 175.5, alignment: .top)
                 .cornerRadius(12)
-            
+                .alert(isPresented: $isClicked) {
+                Alert(title: Text("Delete Category?"), message: Text("Are you sure you want to delete this category? It will be removed permanently."), primaryButton: .destructive(Text("Delete")){
+                    vm.deleteCategory(category)
+                }, secondaryButton: .cancel())
+            }
+
         }
 }
 

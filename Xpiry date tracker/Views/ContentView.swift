@@ -13,6 +13,7 @@ struct ContentView: View {
     
     @StateObject private var viewModel = ViewModel()
     @State private var showCategoryModal = false
+    @State private var showAddCategoryModal = false
     @State private var showDeleteAlert: Bool = false
    
     
@@ -51,12 +52,11 @@ struct ContentView: View {
                                     ForEach(vm.categories, id: \.self){ category in
                                         CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
                                         
-                                  
-                                        
+
                                     }
                                     
                                     Button {
-                                        showCategoryModal.toggle()
+                                        showAddCategoryModal.toggle()
                                     } label: {
                                         Image(systemName: "plus").foregroundColor(.gray)
                                         
@@ -252,6 +252,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $viewModel.showAddModal) {
                 AddItemView(selectedCategory: $selectedCategory).environmentObject(vm)
+            }
+            .sheet(isPresented: $showAddCategoryModal) {
+                AddCategory(vm:vm)
             }
             
             

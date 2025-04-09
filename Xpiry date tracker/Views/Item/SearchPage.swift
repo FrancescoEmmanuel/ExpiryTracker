@@ -13,35 +13,38 @@ struct SearchPage: View {
     }
 
     var body: some View {
-        VStack {
-            
-            ScrollView {
-                LazyVStack() {
-                    if filteredItems.isEmpty {
-                        Text("No item found")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .padding(.top, 250)
-                    }else {
-                        
-                        ForEach(filteredItems, id: \.self) { item in
-                            ItemCard(item: item, vm: vm)
-                                .padding(.horizontal)
-                            Divider()
+        NavigationStack{
+            VStack{
+                
+                ScrollView {
+                    LazyVStack() {
+                        if filteredItems.isEmpty {
+                            Text("No item found")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .padding(.top, 250)
+                        }else {
+                            
+                            ForEach(filteredItems, id: \.self) { item in
+                                ItemCard(item: item, vm: vm)
+                                    .padding(.horizontal)
+                                Divider()
+                            }
                         }
                     }
-                }
-            }.searchable(text: $searchText, prompt: "Search item").padding(.vertical)
-
+                }.searchable(text: $searchText, prompt: "Search item").padding(.vertical)
+                
+            }.toolbar{
+                HStack {
+                    Text("Search")
+                        .font(.headline)
+                }.padding(.trailing, 160)
+                
+            }
+            
         }
-        .background(Color.white.opacity(0.5))
-        .toolbar{
-            HStack {
-                Text("Search")
-                    .font(.headline)
-            }.padding(.trailing, 160)
-
-        }
+        .tint(Color.myGreen)
+        .background(Color.background)
     }
 }
 

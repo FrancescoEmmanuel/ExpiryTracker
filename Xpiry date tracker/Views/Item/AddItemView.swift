@@ -22,6 +22,7 @@ struct AddItemView: View {
     
     @Binding var selectedCategory: CategoryEntity?
     @State private var showValidationSheet = false
+    @State private var showErrorHandling = false
     @EnvironmentObject var vm: CoreDataVM
     
 
@@ -95,19 +96,29 @@ struct AddItemView: View {
                     Spacer()
                     
                     Button("Done") {
+                        
+                        guard !itemName.isEmpty, !quantity.isEmpty else {
+                                showErrorHandling = true
+                                return
+                            }
+                        
                         let name = itemName
                         let qty = Int64(Int(quantity) ?? 0)
                         let expDate = dueDate
                         let image = selectedImage
                         let category = selectedCategory
-
+                        
+                       
+            
                         if category == nil {
                             vm.addItem(name: name, quantity: qty, exp: expDate, image: image)
+                            
                         } else {
                             vm.addItem(name: name, quantity: qty, category: category, exp: expDate, image: image)
                         }
-
+                        
                         dismiss()
+                        selectedCategory = nil
                     }
 
                         .foregroundColor(Color.myGreen)
@@ -127,9 +138,12 @@ struct AddItemView: View {
                 //                    Text("Add Items")
                 //                }
                 ToolbarItem (placement: .navigationBarLeading){
-                    Button("Cancel") {showValidationSheet = true}.foregroundColor(Color.myGreen)
-                        .toolbarBackground(Color.blue, for: .navigationBar)
+                    Button("Cancel") {
+                        showValidationSheet = true
+                    }.foregroundColor(Color.myGreen)
+                        .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
                         .toolbarBackground(.visible, for: .navigationBar)
+
                 }
             }
             .navigationBarTitle(Text("Add Items") .fontWeight(.semibold))
@@ -138,6 +152,12 @@ struct AddItemView: View {
             
         }
         .interactiveDismissDisabled(true)
+        .alert("Please fill all the fields.", isPresented: $showErrorHandling) {
+                   Button("OK", role: .cancel) {
+                       showErrorHandling = false
+                   }
+               }
+        
         .sheet(isPresented: $showCategoryModal) {
             CategoryPage(selectedCategory: $selectedCategory)
             
@@ -145,12 +165,14 @@ struct AddItemView: View {
             
             Button("Discard Changes", role: .destructive) {
                 dismiss()
+                selectedCategory = nil
             }
 
             Button("Keep Editing", role: .cancel) {
                 // do nothing, just dismiss the dialog
             }.foregroundColor(Color.myGreen)
         }
+        
     }
 }
 // Preview
