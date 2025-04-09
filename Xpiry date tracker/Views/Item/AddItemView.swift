@@ -136,7 +136,9 @@ struct AddItemView: View {
                 
                 
             
-        }.sheet(isPresented: $showCategoryModal) {
+        }
+        .interactiveDismissDisabled(true)
+        .sheet(isPresented: $showCategoryModal) {
             CategoryPage(selectedCategory: $selectedCategory)
             
         }.confirmationDialog("Discard changes?", isPresented: $showValidationSheet, titleVisibility: .visible) {

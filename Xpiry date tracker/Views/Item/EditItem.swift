@@ -150,6 +150,7 @@ struct EditItemView: View {
                 
             
         }
+        .interactiveDismissDisabled(true)
         .onAppear {
             if let item = itemToEdit {
                 itemName = item.name ?? ""

@@ -81,7 +81,7 @@ struct CategoryPage: View {
             }
             
             
-        }
+        }.interactiveDismissDisabled(true)
     }
 }
  
