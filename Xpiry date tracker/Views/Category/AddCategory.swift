@@ -54,6 +54,7 @@ struct AddCategory: View {
                     }) {
                         Text("Done")
                             .foregroundStyle(Color(hex: "#0F8822"))
+                            .fontWeight(.semibold)
                             
                     }
                     .frame(width: screenWidth*0.9, height: 60)
@@ -85,6 +86,7 @@ struct AddCategory: View {
                 ToolbarItem(placement: .principal) { // Center-aligned title
                     Text("Add Category")
                         .font(.system(size: 17))
+                        .fontWeight(.semibold)
                 }
             }
             
