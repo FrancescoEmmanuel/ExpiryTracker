@@ -62,7 +62,7 @@ struct ItemCard: View {
                 
                 VStack(alignment: .leading){
                     Text(item.name ?? "Undefåined").font(.system(size:16, weight:.medium))
-                    Text(String("Quantity: \(item.qty)")).font( .system(size:15 ,weight: .regular)).foregroundColor(.gray)
+                    Text(String("\(item.qty)")).font( .system(size:15 ,weight: .regular)).foregroundColor(.gray)
                 }
                 Spacer()
                 VStack(alignment: .trailing){

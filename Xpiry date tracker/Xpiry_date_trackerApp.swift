@@ -11,6 +11,13 @@ import SwiftUI
 @main
 struct Xpiry_date_trackerApp: App {
     
+
+   
+
+    init() {
+        NotifManager.instance.requestAuthorization()
+    }
+
     @StateObject private var barcodeVm = BarcodeScannerViewModel()
     
     let persistenceController = PersistenceController.shared
@@ -26,3 +33,5 @@ struct Xpiry_date_trackerApp: App {
         }
     }
 }
+
+
