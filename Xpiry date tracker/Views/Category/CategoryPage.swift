@@ -13,6 +13,9 @@ struct CategoryPage: View
     @State private var searchText = ""
     @EnvironmentObject var vm: CoreDataVM
     
+
+    
+
     @Binding var selectedCategory: CategoryEntity?
     
     
@@ -53,10 +56,11 @@ struct CategoryPage: View
                             ForEach(filteredCategories, id:\.self) { category in
                                 CategoryCard(category: category, vm: vm)
                                     .onTapGesture{
-                                        
+                                    
+                                        viewModel.selectedCategoryName = category.name ?? "Uncategorized"
                                             selectedCategory = category
                                             dismiss()
-                                        
+                
                                     }
                             }
                         }

@@ -98,6 +98,7 @@ struct EditItemView: View {
                     Spacer()
                     
                     Button("Done") {
+                        
                         guard let item = itemToEdit else { return }
 
                         let name: String = itemName
@@ -166,7 +167,7 @@ struct EditItemView: View {
         }
 
         .sheet(isPresented: $showCategoryModal) {
-            CategoryPage( selectedCategory: $selectedCategory)
+            CategoryPage(selectedCategory: $selectedCategory)
             
         }.confirmationDialog("Discard changes?", isPresented: $showValidationSheet, titleVisibility: .visible) {
             

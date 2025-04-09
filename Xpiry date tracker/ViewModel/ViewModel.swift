@@ -8,12 +8,12 @@
 
 import SwiftUI
 
-
 class ViewModel: ObservableObject {
     @Published var isEditing = false
     @Published var selectedItems: Set<UUID> = []
     @Published var sections = []
     @Published var showAddModal: Bool = false
+    @Published var selectedCategoryName:  String = "All"
 
 }
 

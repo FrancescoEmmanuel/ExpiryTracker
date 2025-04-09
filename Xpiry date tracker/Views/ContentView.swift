@@ -7,9 +7,8 @@ struct ContentView: View {
     @StateObject var vm = CoreDataVM()
     
     @State private var selectedCategory: CategoryEntity?
-    @State private var selectedCategoryName: String = "All"
-    
     @StateObject private var viewModel = ViewModel()
+    
     @State private var showCategoryModal = false
     @State private var showAddCategoryModal = false
     @State private var showDeleteAlert: Bool = false
@@ -38,13 +37,14 @@ struct ContentView: View {
                 
                 ScrollView{
                     VStack(alignment:.leading, spacing: 0) {
-                    
+                        
                             ScrollView(.horizontal, showsIndicators: false){
                                 HStack {
-                                    CategoryButton(label: "All", selectedCategory: $selectedCategoryName)
+                                    
+                                    CategoryButton(label: "All", selectedCategory: $viewModel.selectedCategoryName)
                                     
                                     ForEach(vm.categories, id: \.self){ category in
-                                        CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
+                                        CategoryButton(label: category.name ?? "", selectedCategory: $viewModel.selectedCategoryName)
                                         
 
                                     }
@@ -93,11 +93,11 @@ struct ContentView: View {
                         VStack(spacing:0){
                             
                             let filteredItems = vm.items.filter { item in
-                                switch selectedCategoryName {
+                                switch viewModel.selectedCategoryName {
                                 case "All":
                                     return true
                                 default:
-                                    return item.categorygrouping?.name == selectedCategoryName
+                                    return item.categorygrouping?.name == viewModel.selectedCategoryName
                                 }
                             }
                             
@@ -250,6 +250,10 @@ struct ContentView: View {
             .sheet(isPresented: $showAddCategoryModal) {
                 AddCategory(vm:vm)
             }
+            .onChange(of: selectedCategory) {
+                viewModel.selectedCategoryName = selectedCategory?.name ?? "All"
+            }
+
             
             
         }

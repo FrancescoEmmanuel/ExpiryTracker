@@ -81,7 +81,8 @@ struct ItemCard: View {
             
             
             
-        }.swipeActions(edge: .trailing, allowsFullSwipe: true){
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true){
             Button{
                 showDeleteAlert.toggle()
               

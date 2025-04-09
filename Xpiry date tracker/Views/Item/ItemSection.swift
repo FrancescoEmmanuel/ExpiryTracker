@@ -11,7 +11,6 @@ struct ItemSection: View {
     
     @State private var showEditModal: Bool = false
     @State private var selectedItem: ItemEntity? = nil
-    
     @State private var selectedCategory: CategoryEntity? = nil
 
     var body: some View {
@@ -96,14 +95,14 @@ struct ItemSection: View {
                     
                     item: item,
                     vm:vm
-                ).onTapGesture {
                     
-                        selectedItem = item
-                        selectedCategory = item.categorygrouping
-                        showEditModal = true
+                ).onTapGesture {
+    
+                    selectedItem = item
+                    selectedCategory = item.categorygrouping
+                    showEditModal = true
                     
                 }
-
                 
             }
             
@@ -149,11 +148,6 @@ struct ItemSection: View {
             return Color.myGray
         }
     }
-    
-    
-    
-    
-    
     
 }
 

@@ -7,14 +7,22 @@
 
 import SwiftUI
 
+
 @main
 struct Xpiry_date_trackerApp: App {
+    
+    @StateObject private var barcodeVm = BarcodeScannerViewModel()
+    
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .task{
+                    await barcodeVm.requestDataScannerAccessStatus()
+                }
+                .environmentObject(barcodeVm)
         }
     }
 }

@@ -255,7 +255,7 @@
 				DEVELOPMENT_TEAM = 989N3Z3L5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Allow access to camera";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow access to camera for taking pictures and barcode scanner.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -286,7 +286,7 @@
 				DEVELOPMENT_TEAM = 989N3Z3L5B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Allow access to camera";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow access to camera for taking pictures and barcode scanner.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
