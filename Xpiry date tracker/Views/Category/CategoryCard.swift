@@ -19,31 +19,25 @@ struct CategoryCard: View {
     let fileManager = LocalFileManager.instance
     
     var body: some View {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white)
-                    .shadow(radius: 5)
-                    .frame(width: 175.5, height: 90)
-                VStack{
+        VStack (spacing: 16){
                     HStack (alignment: .top){
                         if let name = category.imgName,
                            let image = fileManager.getImage(name: name) {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 45, height: 40)
+                                .frame(width: 32, height: 32)
                                 .clipShape(Circle())
                         } else {
                             Image(systemName: "photo.fill") // fallback image
                                 .resizable()
                                 .scaleEffect(0.6)
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 45, height: 40)
+                                .frame(width: 32, height: 32)
                                 .foregroundColor(.gray)
+                                .background(Color(.systemGroupedBackground))
                                 .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray, lineWidth: 0.5))
                         }
-
                         Spacer()
                         
                         Menu {
@@ -63,47 +57,56 @@ struct CategoryCard: View {
                         } label: {
                             Image(systemName: "ellipsis.circle.fill")
                                 .foregroundStyle(Color(hex: "#C6C6C8"))
-                                .frame(width: 17, height: 17)
+                                
                         }
                         .sheet(isPresented: $showEditCategory) {
                             EditCategory(category: category, vm: vm)
                         }
                         
                     }
-                    .padding(.horizontal)
-                    HStack{
-                        Text(category.name ?? "Uncategorised")
+                    .padding(.horizontal, 8)
+                    .padding(.top, 8)
+            HStack (spacing: 8) {
+                        Text(category.name ?? "Uncategorized")
+                    .frame(width: 115.5, alignment: .leading)
                             .font(.system(size:16))
-                        Spacer()
-                        Text("\(category.items?.count ?? 0) items")
+                            .fontWeight(.medium)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(1)
+                                .truncationMode(.tail)
+                        Text("\(category.items?.count ?? 0)")
+                            .multilineTextAlignment(.trailing)
                             .foregroundStyle(.gray)
-                            .font(.system(size:15))
+                            .font(.system(size:16))
+                            .frame(width: 32, alignment: .trailing)
                     }
-                    .padding(.horizontal)
-                    
+                    .padding(.bottom, 8)
+    
                 }
-                .frame(width: 185, height: 84)
-            }
+        .background(Color.white)
+                .frame(width: 175.5, alignment: .top)
+                .cornerRadius(12)
+            
         }
 }
 
 
-//#Preview {
-//    let previewContext = CoreDataManager.instance.context
-//        let sampleCategory: CategoryEntity = {
-//            let category = CategoryEntity(context: previewContext)
-//            category.name = nil
-//
-//            let item1 = ItemEntity(context: previewContext)
-//            item1.name = "Milk"
-//            item1.categorygrouping = category
-//
-//            let item2 = ItemEntity(context: previewContext)
-//            item2.name = "Tea"
-//            item2.categorygrouping = category
-//
-//            category.items = NSSet(array: [item1, item2])
-//            return category
-//        }()
-//
-//        return CategoryCard(category: sampleCategory, vm: CoreDataVM())}
+#Preview {
+    let previewContext = CoreDataManager.instance.context
+        let sampleCategory: CategoryEntity = {
+            let category = CategoryEntity(context: previewContext)
+            category.name = nil
+
+            let item1 = ItemEntity(context: previewContext)
+            item1.name = "Milk"
+            item1.categorygrouping = category
+
+            let item2 = ItemEntity(context: previewContext)
+            item2.name = "Tea"
+            item2.categorygrouping = category
+
+            category.items = NSSet(array: [item1, item2])
+            return category
+        }()
+
+        return CategoryCard(category: sampleCategory, vm: CoreDataVM())}

@@ -128,12 +128,12 @@ struct AddItemView: View {
                 //                }
                 ToolbarItem (placement: .navigationBarLeading){
                     Button("Cancel") {showValidationSheet = true}.foregroundColor(Color.myGreen)
+                        .toolbarBackground(Color.blue, for: .navigationBar)
+                        .toolbarBackground(.visible, for: .navigationBar)
                 }
             }
             .navigationBarTitle(Text("Add Items") .fontWeight(.semibold))
             .navigationBarTitleDisplayMode(.inline)
-                
-                
                 
             
         }

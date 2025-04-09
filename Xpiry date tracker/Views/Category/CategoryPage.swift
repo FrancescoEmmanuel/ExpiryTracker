@@ -23,7 +23,7 @@ struct CategoryPage: View {
     var body: some View {
         NavigationStack { // Wrap in NavigationStack for in-modal navigation
             ZStack{
-                Color.white.opacity(0.2) // Semi-transparent overlay
+                Color(.systemGroupedBackground) // Semi-transparent overlay
                     .ignoresSafeArea()
                     .blur(radius: 10)
                 ScrollView {
@@ -58,6 +58,7 @@ struct CategoryPage: View {
                     ToolbarItem(placement: .principal) { // Center-aligned title
                         Text("Category")
                             .font(.system(size: 17))
+                            .fontWeight(.semibold)
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         NavigationLink(destination: AddCategory(vm: vm).navigationBarBackButtonHidden(true)) { 
