@@ -6,8 +6,6 @@ struct ContentView: View {
     
     @StateObject var vm = CoreDataVM()
     
-    
-    
     @State private var selectedCategory: CategoryEntity?
     @State private var selectedCategoryName: String = "All"
     
@@ -16,10 +14,6 @@ struct ContentView: View {
     @State private var showAddCategoryModal = false
     @State private var showDeleteAlert: Bool = false
    
-    
-    
-    
-    
     
     
     let sectionPriority: [String: Int] = [
@@ -161,7 +155,7 @@ struct ContentView: View {
                         
                         Button {
                             if !viewModel.isEditing{
-                                viewModel.showAddModal.toggle()
+                                viewModel.showAddModal = true
                 
                             }
                             

@@ -25,6 +25,8 @@ struct AddItemView: View {
     @State private var showErrorHandling = false
     @EnvironmentObject var vm: CoreDataVM
     
+    @StateObject private var viewModel = ViewModel()
+    
 
     
     let fileManager = LocalFileManager.instance
@@ -118,6 +120,7 @@ struct AddItemView: View {
                         }
                         
                         dismiss()
+                        viewModel.showAddModal = false
                         selectedCategory = nil
                     }
 
@@ -166,6 +169,7 @@ struct AddItemView: View {
             Button("Discard Changes", role: .destructive) {
                 dismiss()
                 selectedCategory = nil
+                viewModel.showAddModal = false
             }
 
             Button("Keep Editing", role: .cancel) {
