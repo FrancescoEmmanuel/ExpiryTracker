@@ -9,8 +9,11 @@ struct ItemSection: View {
     @EnvironmentObject var vm: CoreDataVM
     
     
+    @State private var showEditModal: Bool = false
+    @State private var selectedItem: ItemEntity? = nil
     
-    
+    @State private var selectedCategory: CategoryEntity? = nil
+
     var body: some View {
         
         
@@ -93,7 +96,14 @@ struct ItemSection: View {
                     
                     item: item,
                     vm:vm
-                )
+                ).onTapGesture {
+                    
+                        selectedItem = item
+                        selectedCategory = item.categorygrouping
+                        showEditModal = true
+                    
+                }
+
                 
             }
             
@@ -103,7 +113,18 @@ struct ItemSection: View {
                 Divider()
             }
             
-        }.padding(.leading,15)
+        }
+        .padding(.leading,15)
+        .sheet(isPresented: $showEditModal) {
+            EditItemView(
+                selectedCategory: $selectedCategory,
+                itemToEdit: $selectedItem
+            )
+            .environmentObject(vm)
+//            .presentationDetents([.medium, .large])
+//            .presentationDragIndicator(.visible)
+        }
+
     }
     
     private func formattedDate(_ date: Date?) -> String {

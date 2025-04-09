@@ -11,10 +11,9 @@ struct CategoryPage: View {
     @State private var selectedImage: UIImage? = nil
     @EnvironmentObject var vm: CoreDataVM
 
-    @Binding var showAddModal : Bool
     @Binding var selectedCategory: CategoryEntity?
     
-    
+    @StateObject private var viewModel = ViewModel()
 //    private let catData = CategoryModel.generateCategoryModel()
     let columns = [
             GridItem(.flexible(), spacing: 8),
@@ -32,10 +31,10 @@ struct CategoryPage: View {
                         ForEach(vm.categories, id: \.self) { category in
                             CategoryCard(category: category, vm: vm)
                                 .onTapGesture{
-                                    if showAddModal == true {
+                                    
                                         selectedCategory = category
                                         dismiss()
-                                    }
+                                    
                                 
                             }
 //

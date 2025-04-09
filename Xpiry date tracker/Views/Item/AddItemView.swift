@@ -20,11 +20,10 @@ struct AddItemView: View {
     
     @State private var showCategoryModal = false
     
-    @Binding var showAddModal : Bool
     @Binding var selectedCategory: CategoryEntity?
     @State private var showValidationSheet = false
     @EnvironmentObject var vm: CoreDataVM
-
+    
 
     
     let fileManager = LocalFileManager.instance
@@ -94,35 +93,23 @@ struct AddItemView: View {
                     .background(Color.white)
                     .cornerRadius(10)
                     Spacer()
+                    
                     Button("Done") {
-                        
-                            if selectedCategory == nil {
-                                vm.addItem(
-                                    name: itemName,
-                                    quantity: Int64(Int(quantity) ?? 0),
-                                    exp: dueDate,
-                                    image: selectedImage
-                                )
-                                
-                            }else{
-                                vm.addItem(
-                                    name: itemName,
-                                    quantity: Int64(Int(quantity) ?? 0),
-                                    category: selectedCategory,
-                                    exp: dueDate,
-                                    image: selectedImage
-                                )
-                                
-                                
-                                
-                               
-                            }
-                        
+                        let name = itemName
+                        let qty = Int64(Int(quantity) ?? 0)
+                        let expDate = dueDate
+                        let image = selectedImage
+                        let category = selectedCategory
+
+                        if category == nil {
+                            vm.addItem(name: name, quantity: qty, exp: expDate, image: image)
+                        } else {
+                            vm.addItem(name: name, quantity: qty, category: category, exp: expDate, image: image)
+                        }
+
                         dismiss()
-
-
-                        
                     }
+
                         .foregroundColor(Color.myGreen)
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
@@ -150,7 +137,7 @@ struct AddItemView: View {
                 
             
         }.sheet(isPresented: $showCategoryModal) {
-            CategoryPage(showAddModal: $showAddModal, selectedCategory: $selectedCategory)
+            CategoryPage(selectedCategory: $selectedCategory)
             
         }.confirmationDialog("Discard changes?", isPresented: $showValidationSheet, titleVisibility: .visible) {
             

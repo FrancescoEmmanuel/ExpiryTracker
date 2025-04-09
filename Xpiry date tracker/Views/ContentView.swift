@@ -14,8 +14,7 @@ struct ContentView: View {
     @StateObject private var viewModel = ViewModel()
     @State private var showCategoryModal = false
     @State private var showDeleteAlert: Bool = false
-    @State private var showAddModal = false
-    
+   
     
     
     
@@ -52,6 +51,10 @@ struct ContentView: View {
                                     ForEach(vm.categories, id: \.self){ category in
                                         CategoryButton(label: category.name ?? "", selectedCategory: $selectedCategoryName)
                                         
+                                  
+                                        
+                                    }
+                                    
                                     Button {
                                         showCategoryModal.toggle()
                                     } label: {
@@ -63,8 +66,6 @@ struct ContentView: View {
                                         .frame(height:34)
                                         .clipShape(.circle)
                                         .padding(.bottom, 10)
-                                        
-                                    }
                                     
                                 }
                 
@@ -160,8 +161,8 @@ struct ContentView: View {
                         
                         Button {
                             if !viewModel.isEditing{
-                                showAddModal.toggle()
-                                
+                                viewModel.showAddModal.toggle()
+                
                             }
                             
                         } label: {
@@ -247,10 +248,10 @@ struct ContentView: View {
                 }
 
             }.sheet(isPresented: $showCategoryModal) {
-                CategoryPage(showAddModal: $showAddModal, selectedCategory: $selectedCategory).environmentObject(vm)
+                CategoryPage( selectedCategory: $selectedCategory).environmentObject(vm)
             }
-            .sheet(isPresented: $showAddModal) {
-                AddItemView(showAddModal: $showAddModal, selectedCategory: $selectedCategory).environmentObject(vm)
+            .sheet(isPresented: $viewModel.showAddModal) {
+                AddItemView(selectedCategory: $selectedCategory).environmentObject(vm)
             }
             
             

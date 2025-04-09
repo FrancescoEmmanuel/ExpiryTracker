@@ -133,15 +133,40 @@ class CoreDataVM: ObservableObject {
         saveData()
     }
     
-    func updateItem(entity: ItemEntity, newName: String?=nil, newQty: Int64?=nil){
-        if let updatedName = newName {
-            entity.name = updatedName // update klo ada input new name
+    func updateItem(
+        entity: ItemEntity,
+        newName: String? = nil,
+        newQty: Int64? = nil,
+        newCategory: CategoryEntity? = nil,
+        newExp: Date? = nil,
+        newImage: UIImage? = nil
+    ) {
+        if let name = newName {
+            entity.name = name
         }
-        if let updatedQty = newQty{
-            entity.qty = updatedQty
+
+        if let qty = newQty {
+            entity.qty = qty
         }
+
+        if let category = newCategory {
+            entity.categorygrouping = category
+        }
+
+        if let exp = newExp {
+            entity.exp = exp
+        }
+
+        if let image = newImage {
+    
+            let imageName = UUID().uuidString
+            LocalFileManager.instance.saveImg(image: image, name: imageName)
+            entity.imgName = imageName
+        }
+
         saveData()
     }
+
     
     func updateCategory(category: CategoryEntity, newName: String){
         category.name = newName
