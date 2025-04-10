@@ -8,11 +8,16 @@
 import SwiftUI
 import PhotosUI
 
+
 struct ImagePicker: View {
     @Binding var selectedImage: UIImage?
     @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var showOptions = false
+    @State private var showCamera = false
+    @State private var showPhotoPicker = false
+
     let displayText: String
-    
+
     var body: some View {
         VStack {
             if let selectedImage {
@@ -20,8 +25,8 @@ struct ImagePicker: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 150, height: 150)
-                    .clipShape(RoundedRectangle(cornerRadius:8))
-                    .overlay(RoundedRectangle(cornerRadius:8).stroke(Color.gray, lineWidth: 2))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 2))
             } else {
                 Image(systemName: "photo.fill")
                     .resizable()
@@ -30,21 +35,36 @@ struct ImagePicker: View {
                     .frame(width: 150, height: 150)
                     .foregroundColor(.white)
                     .background(Color(hex: "#DADADA"))
-                    .clipShape(RoundedRectangle(cornerRadius:8))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
             }
-            
-            PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
-                Text(displayText)
-                    .foregroundStyle(Color(hex: "#0F8822"))
-                    .offset(y: 10)
+
+            Button(displayText) {
+                showOptions = true
             }
-            .onChange(of: selectedPhoto) {
-                loadImage()
+            .foregroundStyle(Color(hex: "#0F8822"))
+            .offset(y: 10)
+        }
+        .confirmationDialog("Select Image Source", isPresented: $showOptions, titleVisibility: .visible) {
+            Button("Take Photo") {
+                showCamera = true
             }
+
+            Button("Choose from Album") {
+                showPhotoPicker = true
+            }
+
+            Button("Cancel", role: .cancel) {}
+        }
+        .fullScreenCover(isPresented: $showCamera) {
+            CameraPicker(selectedImage: $selectedImage)
+        }
+        .photosPicker(isPresented: $showPhotoPicker, selection: $selectedPhoto, matching: .images)
+        .onChange(of: selectedPhoto) {
+            loadImage()
         }
         .padding()
     }
-    
+
     private func loadImage() {
         guard let selectedPhoto else { return }
         Task {
@@ -55,20 +75,3 @@ struct ImagePicker: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var selectedImage: UIImage? = nil
-//
-//    // Create a mock CoreData context
-//    let previewContext = CoreDataManager.instance.context
-//
-//    // Create a sample CategoryEntity
-//    let sampleCategory: CategoryEntity = {
-//        let category = CategoryEntity(context: previewContext)
-//        category.name = "Sample Category"
-//        category.imgName = "" // No saved image initially
-//        return category
-//    }()
-//
-//    ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo" , category: sampleCategory, vm: CoreDataVM())
-//}

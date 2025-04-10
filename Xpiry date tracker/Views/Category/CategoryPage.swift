@@ -66,9 +66,10 @@ struct CategoryPage: View
                         }
                     }
                     .padding()
-                }
+                }.searchable(text: $searchText, prompt: "Search category")
                 
-                .toolbar {
+               
+            }.toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
                             dismiss()
@@ -93,25 +94,16 @@ struct CategoryPage: View
                                 .foregroundStyle(Color(hex: "#0F8822"))
                         }
                         
-                        
-                        // the following code is used when we want to open AddCategory as a modal
-                        //                        Button {
-                        //                        } label: {
-                        //                            Image(systemName: "plus")
-                        //                                .foregroundStyle(Color(hex: "#0F8822"))
-                        //                        }
-                        //                        .sheet(isPresented: $showAddCategory) {
-                        //                            AddCategory(vm: vm)
-                        //                        }
                     }
                     
                 }
-            }
+            
             
             
         }
         .interactiveDismissDisabled(true)
-        .searchable(text: $searchText, prompt: "Search category")
+        
+        
        
         
         

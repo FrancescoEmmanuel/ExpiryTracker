@@ -22,9 +22,9 @@ struct AddCategory: View {
     var body: some View {
         NavigationStack{
             ZStack{
-//                Color.clear
-//                    .background(.ultraThinMaterial) // Apple's blur effect
-//                    .ignoresSafeArea()
+                Color.clear
+                    .background(.ultraThinMaterial) // Apple's blur effect
+                    .ignoresSafeArea()
                 VStack {
                     ImagePicker(selectedImage: $selectedImage, displayText: "Add Photo")
                     HStack {
@@ -39,7 +39,7 @@ struct AddCategory: View {
                     }
                     .frame(width: screenWidth * 0.9)
                     .background(Color.white)
-                    // encompass both rectangles (text and textfield)
+                    
                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.white, lineWidth: 1))
                     .cornerRadius(10)
                     .padding(.vertical, 40)
@@ -119,11 +119,9 @@ struct AddCategory: View {
     }
 }
 
-//#Preview {
-//    let context = CoreDataManager.instance.context
-//    let category = CategoryEntity(context: context)
-//    category.name = "Sample Category"
-//    let vm = CoreDataVM()
-//    return AddCategory(vm: vm, category: category)
-//}
-//
+#Preview {
+    let vm = CoreDataVM()
+    AddCategory(vm: vm)
+}
+
+
